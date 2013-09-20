@@ -17,13 +17,15 @@ public class Percolation {
 
     private final int n;
     private final WeightedQuickUnionUF uf;
-    private final boolean cells[][];
+    private final boolean[][] cells;
 
     /**
      * create N-by-N grid, with all sites blocked
      */
     public Percolation(int N) {
-        if(N<=0)throw new IllegalArgumentException();
+        if (N <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.n = N;
         this.cells = new boolean[n + 2][n + 2];
         this.uf = new WeightedQuickUnionUF(n * n + 2);
@@ -77,7 +79,7 @@ public class Percolation {
      */
     public boolean isFull(int i, int j) {
         checkBounds(i, j);
-        return isOpen(i,j)&&uf.connected(0, cid(i, j));
+        return isOpen(i, j) && uf.connected(0, cid(i, j));
     }
 
     /**

@@ -6,17 +6,21 @@
 public class PercolationStats {
 
     private final double mean, stddev;
-    private final int N, T;
+    private final int n, t;
     private final double confidenceLo, confidenceHi;
 
     /**
      * perform T independent computational experiments on an N-by-N grid
      */
     public PercolationStats(int N, int T) {
-        if(N<=0)throw new IllegalArgumentException();
-        if(T<=0)throw new IllegalArgumentException();
-        this.N = N;
-        this.T = T;
+        if (N <= 0) {
+            throw new IllegalArgumentException();
+        }
+        if (T <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.n = N;
+        this.t = T;
         final double results[] = new double[T];
         for (int t = 0; t < T; t++) {
             results[t] = doPercolation(N);
@@ -72,7 +76,7 @@ public class PercolationStats {
 
     private double doPercolation(int N) {
         int N2 = N * N;
-        int shuffled[] = new int[N2];
+        int[] shuffled = new int[N2];
         for (int r = 0; r < N2; r++) {
             shuffled[r] = r;
         }
