@@ -1,19 +1,20 @@
-import java.util.ArrayList;
-
 /*
  * Solution proposal to coursea Algorithms Part 1
  * Programming Assignment 1: Percolation
  */
+
 public class PercolationStats {
 
-    final double mean, stddev;
-    final int N, T;
-    private double confidenceLo, confidenceHi;
+    private final double mean, stddev;
+    private final int N, T;
+    private final double confidenceLo, confidenceHi;
 
     /**
      * perform T independent computational experiments on an N-by-N grid
      */
     public PercolationStats(int N, int T) {
+        if(N<=0)throw new IllegalArgumentException();
+        if(T<=0)throw new IllegalArgumentException();
         this.N = N;
         this.T = T;
         final double results[] = new double[T];
@@ -70,24 +71,25 @@ public class PercolationStats {
     }
 
     private double doPercolation(int N) {
-        
-        int N2=N*N;
-        int shuffled[]=new int[N2];        
+        int N2 = N * N;
+        int shuffled[] = new int[N2];
         for (int r = 0; r < N2; r++) {
-            shuffled[r]=r;
+            shuffled[r] = r;
         }
         StdRandom.shuffle(shuffled);
         Percolation p = new Percolation(N);
-        
+
         for (int r = 0; r < N2; r++) {
-            int i = shuffled[r]/N+1;
-            int j = shuffled[r]%N+1;
-            System.out.println("open ("+i+","+j+")");
+            int i = shuffled[r] / N + 1;
+            int j = shuffled[r] % N + 1;
             p.open(i, j);
-            p.show();
-            if(p.percolates()) return (double)r/N2;
-        }        
+            //System.out.println("open ("+i+","+j+")");
+            //p.show();
+            if (p.percolates()) {
+                return (double) r / N2;
+            }
+        }
         return 1.;
-        
+
     }
 }
