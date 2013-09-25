@@ -21,9 +21,9 @@ public class PercolationStats {
         }
         this.n = N;
         this.t = T;
-        final double results[] = new double[T];
-        for (int t = 0; t < T; t++) {
-            results[t] = doPercolation(N);
+        final double[] results= new double[T];
+        for (int i = 0; i < T; i++) {
+            results[i] = doPercolation(N);
         }
         mean = StdStats.mean(results);
         stddev = StdStats.stddev(results);
