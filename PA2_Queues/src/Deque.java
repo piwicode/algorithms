@@ -13,22 +13,20 @@ public class Deque<Item> implements Iterable<Item> {
         Element<Item> prev, next;
 
         public Element(Item item, Element<Item> prev, Element<Item> next) {
-            if (item == null) {
-                throw new NullPointerException();
-            }
+
             this.item = item;
             this.prev = prev;
             this.next = next;
         }
     }
     private int size;
-    private Element<Item> first;
-    private Element<Item> last;
+    private Element<Item> e = new Element(null, null, null);
 
     /**
      * construct an empty deque
      */
     public Deque() {
+        e.next=e.prev=e;
     }
 
     /**
@@ -45,67 +43,50 @@ public class Deque<Item> implements Iterable<Item> {
         return size;
     }
 
+    private void insert(Item i, Element<Item> b, Element<Item> a) {
+        if (i == null) {
+            throw new NullPointerException();
+        }
+        b.next = a.prev = new Element<Item>(i, b, a);
+        size++;
+    }
+
+    private Item remove(Element<Item> a) {
+        if (a==e) {
+            throw new NoSuchElementException();
+        }
+        a.prev.next=a.next;
+        a.next.prev=a.prev;
+        size--;
+        return a.item;
+    }
+
     /**
      * insert the item at the front
      */
     public void addFirst(Item item) {
-
-        first = new Element<Item>(item, null, first);
-        if (first.next != null) {
-            first.next.prev = first;
-        } else {
-            last = first;
-        }
-        size++;
+        insert(item, e,e.next);        
     }
 
     /**
      * insert the item at the end
      */
     public void addLast(Item item) {
-        last = new Element<Item>(item, last, null);
-        if (last.prev != null) {
-            last.prev.next = last;
-        } else {
-            first = last;
-        }
-        size++;
+        insert(item, e.prev,e);
     }
 
     /**
      * delete and return the item at the front
      */
-    public Item removeFirst() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        size--;
-        Element<Item> e = first;
-        first = e.next;
-        if (first != null) {
-            first.prev = null;
-        } else {
-            last = null;
-        }
-        return e.item;
+    public Item removeFirst() {       
+        return remove(e.next);
     }
 
     /**
      * delete and return the item at the end
      */
     public Item removeLast() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        size--;
-        Element<Item> e = last;
-        last = e.prev;
-        if (last != null) {
-            last.next = null;
-        } else {
-            first = null;
-        }
-        return e.item;
+        return remove(e.prev);
     }
 
     /**
@@ -113,38 +94,25 @@ public class Deque<Item> implements Iterable<Item> {
      */
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
-            Element<Item> cur = first;
+            Element<Item> cur = e.next;
 
             @Override
             public boolean hasNext() {
-                return cur != null;
+                return cur != e;
             }
 
             @Override
             public Item next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
-                }
-                Item i = cur.item;
+                }                
                 cur = cur.next;
-                return i;
+                return cur.prev.item;
             }
 
             @Override
             public void remove() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-
-                if (cur == first) {
-                    removeFirst();
-                } else if (cur == last) {
-                    removeLast();
-                } else {
-                    size--;
-                    cur.prev.next = cur.next;
-                    cur.next.prev = cur.prev;
-                }
+                Deque.this.remove(cur);
             }
         };
     }
