@@ -77,6 +77,15 @@ public class DequeTest {
         assertTrue(iterator.hasNext());
         assertEquals(5, iterator.next().intValue());
         assertFalse(iterator.hasNext());
+        
+        assertEquals(0, deq.removeFirst().intValue());
+        assertEquals(1, deq.removeFirst().intValue());
+        assertEquals(2,deq.removeFirst().intValue());
+        assertEquals(5, deq.removeLast().intValue());
+        assertEquals(4,deq.removeLast().intValue());
+        assertEquals(3,deq.removeLast().intValue());
+        
+        
     }
 
     @Test(expected = NullPointerException.class)
