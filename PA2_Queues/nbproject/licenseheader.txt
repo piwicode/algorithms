@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Solution proposal to coursea Algorithms Part 1
+${licensePrefix}Programming Assignment 2: Randomized Queues and Deques
+<#if licenseLast??>
+${licenseLast}
+</#if>
