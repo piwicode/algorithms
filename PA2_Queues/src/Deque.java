@@ -26,7 +26,7 @@ public class Deque<Item> implements Iterable<Item> {
      * construct an empty deque
      */
     public Deque() {
-        e.next=e.prev=e;
+        e.next = e.prev = e;
     }
 
     /**
@@ -52,11 +52,11 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private Item remove(Element<Item> a) {
-        if (a==e) {
+        if (a == e) {
             throw new NoSuchElementException();
         }
-        a.prev.next=a.next;
-        a.next.prev=a.prev;
+        a.prev.next = a.next;
+        a.next.prev = a.prev;
         size--;
         return a.item;
     }
@@ -65,20 +65,20 @@ public class Deque<Item> implements Iterable<Item> {
      * insert the item at the front
      */
     public void addFirst(Item item) {
-        insert(item, e,e.next);        
+        insert(item, e, e.next);
     }
 
     /**
      * insert the item at the end
      */
     public void addLast(Item item) {
-        insert(item, e.prev,e);
+        insert(item, e.prev, e);
     }
 
     /**
      * delete and return the item at the front
      */
-    public Item removeFirst() {       
+    public Item removeFirst() {
         return remove(e.next);
     }
 
@@ -92,6 +92,7 @@ public class Deque<Item> implements Iterable<Item> {
     /**
      * return an iterator over items in order from front to end
      */
+    @Override
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
             Element<Item> cur = e.next;
@@ -105,14 +106,14 @@ public class Deque<Item> implements Iterable<Item> {
             public Item next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
-                }                
+                }
                 cur = cur.next;
                 return cur.prev.item;
             }
 
             @Override
             public void remove() {
-                Deque.this.remove(cur);
+                throw new UnsupportedOperationException();
             }
         };
     }

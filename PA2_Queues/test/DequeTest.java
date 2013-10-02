@@ -89,12 +89,12 @@ public class DequeTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testSize() {
+    public void testAddNullFirst() {
         deq.addFirst(null);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testAddFirst() {
+    public void testAddNullLast() {
         deq.addLast(null);
     }
 
@@ -108,7 +108,7 @@ public class DequeTest {
         deq.removeLast();
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveLast() {
         deq.iterator().remove();
     }
