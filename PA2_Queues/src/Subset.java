@@ -15,7 +15,7 @@ public class Subset {
         if (args.length != 1) {
             throw new IllegalArgumentException();
         }
-        String[] result = new String[Integer.parseInt(args[0])];
+        final String[] result = new String[Integer.parseInt(args[0])];
         int count = 0;
         try {
             while (true) {
@@ -32,7 +32,7 @@ public class Subset {
             }
         } catch (NoSuchElementException e) {//Nothing
         }
-        for (String s : result) {
+        for (final String s : result) {
             StdOut.println(s);
         }
     }

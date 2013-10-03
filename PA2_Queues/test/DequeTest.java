@@ -3,7 +3,9 @@
  * Programming Assignment 2: Randomized Queues and Deques
  */
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -61,7 +63,7 @@ public class DequeTest {
         deq.addLast(4);
         deq.addLast(5);
         deq.addFirst(0);
-        
+
         assertEquals(6, deq.size());
         Iterator<Integer> iterator = deq.iterator();
         assertTrue(iterator.hasNext());
@@ -77,15 +79,14 @@ public class DequeTest {
         assertTrue(iterator.hasNext());
         assertEquals(5, iterator.next().intValue());
         assertFalse(iterator.hasNext());
-        
+
         assertEquals(0, deq.removeFirst().intValue());
         assertEquals(1, deq.removeFirst().intValue());
-        assertEquals(2,deq.removeFirst().intValue());
+        assertEquals(2, deq.removeFirst().intValue());
         assertEquals(5, deq.removeLast().intValue());
-        assertEquals(4,deq.removeLast().intValue());
-        assertEquals(3,deq.removeLast().intValue());
-        
-        
+        assertEquals(4, deq.removeLast().intValue());
+        assertEquals(3, deq.removeLast().intValue());
+
     }
 
     @Test(expected = NullPointerException.class)
@@ -114,8 +115,65 @@ public class DequeTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void testRemoveLast2() {
+    public void testIteratorFail() {
         deq.iterator().next();
+    }
+
+    @Test
+    public void testRemoveLast2() {
+        deq.addFirst(2);
+        deq.addLast(3);
+        deq.addFirst(1);
+        assertEquals(3, (int) deq.removeLast());
+        deq.addFirst(0);
+        assertEquals(0, (int) deq.removeFirst());
+        deq.addLast(4);
+        assertEquals(4, (int) deq.removeLast());
+        deq.addLast(5);
+        assertEquals(1, (int) deq.removeFirst());
+
+        Iterator<Integer> iterator = deq.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(2, iterator.next().intValue());
+        assertTrue(iterator.hasNext());
+        assertEquals(5, iterator.next().intValue());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testRandom() {
+        LinkedList<Integer> ll = new LinkedList<>();
+        Random random = new Random();
+        for (int i = 1; i < 1000000; i++) {
+            if (ll.isEmpty() == false && random.nextInt(4) == 0) {
+                if (random.nextBoolean()) {
+                    assertEquals(ll.removeFirst().intValue(), deq.removeFirst().intValue());
+                } else {
+                    assertEquals(ll.removeLast().intValue(), deq.removeLast().intValue());
+                }
+            } else {
+                if (random.nextBoolean()) {
+                    ll.addFirst(i);
+                    deq.addFirst(i);
+                } else {
+                    ll.addLast(i);
+                    deq.addLast(i);
+                }
+            }
+        }
+        Iterator<Integer> di = deq.iterator();
+        Iterator<Integer> li = ll.iterator();
+
+        while (li.hasNext()) {
+            if (random.nextBoolean()) {
+                assertEquals(di.next().intValue(), li.next().intValue());
+            } else {
+                assertEquals(di.hasNext(), li.hasNext());
+            }
+        }
+        assertEquals(di.hasNext(), li.hasNext());
+        assertEquals(di.hasNext(), li.hasNext());
+
     }
 
 }

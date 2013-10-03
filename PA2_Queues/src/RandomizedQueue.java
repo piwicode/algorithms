@@ -88,8 +88,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
      */
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
-            int pos = 0;
-            final Item[] local = array.clone();
+            private int pos = 0;
+            private final Item[] local = array.clone();
 
             @Override
             public boolean hasNext() {
@@ -113,7 +113,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private void resizeTo(int newSize) {
-        Item[] buf = (Item[]) new Object[newSize];
+        final Item[] buf = (Item[]) new Object[newSize];
         for (int i = 0; i < size; i++) {
             buf[i] = array[i];
         }

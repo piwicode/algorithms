@@ -9,8 +9,8 @@ public class Deque<Item> implements Iterable<Item> {
 
     private static class Element<Item> {
 
-        final Item item;
-        Element<Item> prev, next;
+        final private Item item;
+        private Element<Item> prev, next;
 
         public Element(Item item, Element<Item> prev, Element<Item> next) {
 
@@ -95,7 +95,7 @@ public class Deque<Item> implements Iterable<Item> {
     @Override
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
-            Element<Item> cur = e.next;
+            private Element<Item> cur = e.next;
 
             @Override
             public boolean hasNext() {
@@ -107,8 +107,9 @@ public class Deque<Item> implements Iterable<Item> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
+                final Item item=cur.item;
                 cur = cur.next;
-                return cur.prev.item;
+                return item;
             }
 
             @Override
