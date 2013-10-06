@@ -35,7 +35,7 @@ public class Fast {
             System.arraycopy(points, 0, pts2, 0, points.length);
             final Point ref = points[refIdx];
             Arrays.sort(pts2, ref.SLOPE_ORDER);
-            for (int startIdx = 0; startIdx < pts2.length; startIdx++) {
+            for (int startIdx = 0; startIdx < pts2.length;) {
                 double startSlope = ref.slopeTo(pts2[startIdx]);
                 int k;
                 boolean ordered = true;
@@ -48,8 +48,8 @@ public class Fast {
                     ordered &= ref.compareTo(pts2[k]) < 0;
                 }
                 //The sequence of same slope is [startIdx,k[
-                if (ordered && k - startIdx >= 4) {
-                    yield(pts2, startIdx, k - 1);
+                if (ordered && k - startIdx >= 3) {
+                    yield(pts2, ref, startIdx, k);
                 }
                 startIdx = k;
             }
@@ -60,17 +60,13 @@ public class Fast {
         StdOut.print(s);
     }
 
-    private void yield(final Point[] points, int from, int to) {
-        points[from].drawTo(points[to]);
-        for (int i = from;; i++) {
-            StdOut.print(points[i]);
-            if (i >= to) {
-                break;
-            }
-            StdOut.print(" -> ");
-
+    private void yield(final Point[] points, Point ref, int from, int to) {
+        ref.drawTo(points[to - 1]);
+        for (int i = from; i < to; i++) {
+            print(" -> ");
+            print(points[i]);
         }
-        StdOut.print("\n");
+        print("\n");
     }
 
 }
