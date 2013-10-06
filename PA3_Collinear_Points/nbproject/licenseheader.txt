@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Solution proposal to coursea Algorithms Part 1
+${licensePrefix}Programming Assignment 3: Collinear Points
+<#if licenseLast??>
+${licenseLast}
+</#if>
