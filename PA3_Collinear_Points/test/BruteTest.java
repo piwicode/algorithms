@@ -44,7 +44,7 @@ public class BruteTest {
         void go(Point[] points);
     }
 
-    static class TBrute extends Brute implements Algo {
+    static class TBrute extends BruteImpl implements Algo {
 
         private StringBuilder sb = new StringBuilder();
 
@@ -60,7 +60,7 @@ public class BruteTest {
 
     }
 
-    static class TFast extends Fast implements Algo {
+    static class TFast extends FastImpl implements Algo {
 
         private StringBuilder sb = new StringBuilder();
 
@@ -153,9 +153,6 @@ public class BruteTest {
     @Test
     public void testFast() throws URISyntaxException, IOException {
         System.out.println(inputPath);
-        if (points.length > 200) {
-            return;
-        }
         final String ref_value = readString(Paths.get(inputPath.toString().replace(".txt", ".ref.fast")));        
         final TFast algo = new TFast();
         algo.go(points);

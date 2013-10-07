@@ -16,7 +16,7 @@ public class Point implements Comparable<Point> {
         this.x = x;
         this.y = y;
     }
-    public final Comparator<Point> SLOPE_ORDER = new Comparator<Point>() {
+    final public Comparator<Point> SLOPE_ORDER = new Comparator<Point>() {
 
         @Override
         public int compare(Point o1, Point o2) {
