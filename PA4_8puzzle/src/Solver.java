@@ -99,7 +99,7 @@ public class Solver {
         }
 
         public List<Board> doOneStep() {
-            final Position pos = candidates.min();
+            final Position pos = candidates.delMin();
             if (pos.board.isGoal()) {
                 return pos.toList();
             }
