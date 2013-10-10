@@ -2,8 +2,6 @@
  * Solution proposal to coursea Algorithms Part 1
  * Programming Assignment 4: 8 Puzzle
  */
-package pa4_8puzzle;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -13,6 +11,7 @@ import java.util.Arrays;
  */
 public class Board {
 
+    private final int hash;
     private final int hamming, manhattan, dim;
     private final int[] b;
     private final int hole;
@@ -25,6 +24,7 @@ public class Board {
     }
 
     private Board(int[] b, int dim) {
+        this.hash = Arrays.hashCode(b);
         this.dim = dim;
         this.b = b.clone();
         int tmpHole = -1, tmpHam = 0, tmpMan = 0;
@@ -36,7 +36,7 @@ public class Board {
             if (b[i] != i + 1) {
                 tmpHam++;
             }
-            tmpMan += manhattanOf(i , b[i]-1, dim);
+            tmpMan += manhattanOf(i, b[i] - 1, dim);
         }
         this.hamming = tmpHam;
         this.hole = tmpHole;
@@ -89,11 +89,16 @@ public class Board {
         return y != null && y.getClass() == Board.class && Arrays.equals(b, ((Board) y).b);
     }
 
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
     /**
      * all neighboring boards
      */
     public Iterable<Board> neighbors() {
-        final ArrayList<Board> res = new ArrayList<>(4);
+        final ArrayList<Board> res = new ArrayList<Board>(4);
         if (hole % dim > 0) {
             res.add(neighbor(hole, hole - 1));
         }
@@ -103,7 +108,7 @@ public class Board {
         if (hole >= dim) {
             res.add(neighbor(hole, hole - dim));
         }
-        if (hole < b.length - dim - 1) {
+        if (hole < b.length - dim) {
             res.add(neighbor(hole, hole + dim));
         }
         return res;
@@ -117,7 +122,7 @@ public class Board {
         sb.append(dim).append('\n');
         for (int i = 0, k = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                sb.append(' ').append(b[k++]);;
+                sb.append(' ').append(String.format("%2d ", b[k++]));;
             }
             sb.append('\n');
         }

@@ -70,4 +70,9 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-post-jar">
+        <zip destfile="${dist.dir}/${application.title}_src.zip" 
+             basedir="${src.dir}"
+             includes="*.java"/>
+    </target>
 </project>
