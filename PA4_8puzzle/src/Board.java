@@ -11,7 +11,6 @@ import java.util.Arrays;
  */
 public class Board {
 
-    private final int hash;
     private final int hamming, manhattan, dim;
     private final int[] b;
     private final int hole;
@@ -24,7 +23,6 @@ public class Board {
     }
 
     private Board(int[] b, int dim) {
-        this.hash = Arrays.hashCode(b);
         this.dim = dim;
         this.b = b.clone();
         int tmpHole = -1, tmpHam = 0, tmpMan = 0;
@@ -83,19 +81,16 @@ public class Board {
     }
 
     /**
-     * does this board equal y?
+     * does this board equal y?     
      */
-    public boolean equals(Object y) {
-        return y != null && y.getClass() == Board.class && Arrays.equals(b, ((Board) y).b);
-    }
-
     @Override
-    public int hashCode() {
-        return hash;
+    public boolean equals(Object y) {
+        return y instanceof Board && Arrays.equals(b, ((Board) y).b);
     }
 
     /**
      * all neighboring boards
+     * @return 
      */
     public Iterable<Board> neighbors() {
         final ArrayList<Board> res = new ArrayList<Board>(4);

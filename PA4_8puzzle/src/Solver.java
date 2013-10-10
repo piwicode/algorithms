@@ -92,20 +92,20 @@ public class Solver {
 
     private class SolvingProcess {
 
-        private final PriorityQueue<Position> candidates = new PriorityQueue<Position>();
+        private final MinPQ<Position> candidates = new MinPQ<Position>();
 
         public SolvingProcess(final Board initial) {
-            candidates.add(new Position(initial, null));
+            candidates.insert(new Position(initial, null));
         }
 
         public List<Board> doOneStep() {
-            final Position pos = candidates.remove();
+            final Position pos = candidates.min();
             if (pos.board.isGoal()) {
                 return pos.toList();
             }
             for (Board neighbor : pos.board.neighbors()) {
                 if (!pos.comesFrom(neighbor)) {
-                    candidates.add(new Position(neighbor, pos));
+                    candidates.insert(new Position(neighbor, pos));
                 }
             }
             return null;
