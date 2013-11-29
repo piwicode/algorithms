@@ -5,7 +5,9 @@
  */
 package com.mycompany.trie;
 
+import com.mycompany.sorts.HybridQuicksort;
 import com.mycompany.sorts.PrettyPrint;
+import com.mycompany.sorts.Report;
 import com.mycompany.sorts.Session;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,25 +17,22 @@ import java.util.List;
  *
  * @author Pierre
  */
-public class MainString {
+public class MainCompactHybridSplit {
 
     public static void main(String[] args) {
-
+        final CompactTriHybridBench bench = new CompactTriHybridBench();
         final List<Session> sessions = new ArrayList<>();
-        sessions.add(new Session(new CompactTriBench()));
-        sessions.add(new Session(new CompactTriHybridBench()));
-        sessions.add(new Session(new ObjectTriBench()));
-        sessions.add(new Session(new HashSetBench()));
-        sessions.add(new Session(new ImmutableHashSetBench()));
+        for (int X = 0; X < 200; X += 1) {
+            sessions.add(new Session(bench).with("split", X));
+        }
+        Collections.shuffle(sessions);
         //Warming up
-        Session.runAll(sessions, 5);
+        Session.runAll(sessions, 2);
         //Bench
-        Session.runAll(sessions, 50);
+        Session.runAll(sessions, 8);
 
-        // Summary
         Collections.sort(sessions);
         System.out.println("------------------------------------------------------------------------");
-        System.out.println("test presence for " + 80368 + " words of " + (622783 / 80368 - 1) + " chars with 50% matching a value in the set");
-        PrettyPrint.printAll(sessions, "-");
+        Report.writeAllAsCsv(sessions);
     }
 }

@@ -31,21 +31,21 @@ public class ObjectTrieTest {
     public void testSomeMethod() {
         final ObjectTri tri = new ObjectTri();
         Assert.assertFalse(tri.contains("abc"));
-        Assert.assertFalse(tri.toCompactTrie().contains("abc"));
+        Assert.assertFalse(tri.toCompactTri().contains("abc"));
         Assert.assertFalse(tri.contains(""));
-        Assert.assertFalse(tri.toCompactTrie().contains(""));
+        Assert.assertFalse(tri.toCompactTri().contains(""));
         tri.add("");
         Assert.assertTrue(tri.contains(""));
-        Assert.assertTrue(tri.toCompactTrie().contains(""));
+        Assert.assertTrue(tri.toCompactTri().contains(""));
         tri.add("abcd");
         Assert.assertFalse(tri.contains("a"));
-        Assert.assertFalse(tri.toCompactTrie().contains("a"));
+        Assert.assertFalse(tri.toCompactTri().contains("a"));
         Assert.assertFalse(tri.contains("b"));
-        Assert.assertFalse(tri.toCompactTrie().contains("b"));
+        Assert.assertFalse(tri.toCompactTri().contains("b"));
         Assert.assertFalse(tri.contains("ab"));
-        Assert.assertFalse(tri.toCompactTrie().contains("ab"));
+        Assert.assertFalse(tri.toCompactTri().contains("ab"));
         Assert.assertTrue(tri.contains("abcd"));
-        Assert.assertTrue(tri.toCompactTrie().contains("abcd"));
+        Assert.assertTrue(tri.toCompactTri().contains("abcd"));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ObjectTrieTest {
         for (String word : words) {
             assertTrue(tri.add(word));
         }
-        final CompactTri ctri = tri.toCompactTrie();
+        final CompactTri ctri = tri.toCompactTri();
         final Random rnd = new Random();
         for (int i = 0; i < 100; i++) {
             for (String word : words) {

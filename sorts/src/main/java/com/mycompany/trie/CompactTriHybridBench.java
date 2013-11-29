@@ -5,21 +5,23 @@
  */
 package com.mycompany.trie;
 
-import com.mycompany.sorts.MacroBench;
-import java.util.Arrays;
-
 /**
  *
  * @author Pierre
  */
-class CompactTriBench extends SetBench {
+public class CompactTriHybridBench extends SetBench {
 
-    CompactTri set;
+    CompactTriHybrid set;
+    int split = 16;
+
+    public void setSplit(int insertLength) {
+        this.split = insertLength;
+    }
 
     @Override
     public void prepare() {
         super.prepare();
-        set = ObjectTri.fromList(words).toCompactTri();        
+        set = ObjectTri.fromList(words).toCompactTriHybrid(split);
     }
 
     @Override

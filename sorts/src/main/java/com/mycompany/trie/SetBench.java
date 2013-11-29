@@ -6,7 +6,6 @@
 package com.mycompany.trie;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
 import com.mycompany.sorts.MacroBench;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -25,7 +23,7 @@ import java.util.Random;
 abstract class SetBench implements MacroBench {
 
     String[] candidates;
-    String[] words;
+    List<String> words;
 
     public SetBench() {
     }
@@ -34,18 +32,14 @@ abstract class SetBench implements MacroBench {
     public void prepare() {
         try {
             final URL url = Resources.getResource(SetBench.class, "dictionary.txt");
-            final List<String> wordsLst = CharStreams.readLines(Resources.asCharSource(url, Charsets.UTF_8));
-            final List<String> candidatesLst = new ArrayList<>();
-            Random rnd = new Random();
-            for (String w : wordsLst) {
-                final int p = rnd.nextInt(w.length());
-                candidatesLst.add(w.substring(0, p) + Character.toUpperCase(w.charAt(p)) + w.substring(p + 1, w.length()));
-                candidatesLst.add(new String(w.toCharArray()));
-            }            
-            Collections.shuffle(wordsLst);
-            Collections.shuffle(candidatesLst);
-            candidates = candidatesLst.toArray(new String[0]);
-            words = wordsLst.toArray(new String[0]);
+            List<String> lines = CharStreams.readLines(Resources.asCharSource(url, Charsets.UTF_8));
+            Collections.shuffle(lines);
+            //lines=lines.subList(0, 500);            
+            candidates = lines.toArray(new String[0]);
+            words = new ArrayList<>(lines.size() / 2);
+            for (int i = 0; i < candidates.length / 2; i++) {
+                words.add(new String(candidates[i].toCharArray()));                
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

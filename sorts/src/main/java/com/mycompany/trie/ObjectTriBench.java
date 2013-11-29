@@ -5,8 +5,6 @@
  */
 package com.mycompany.trie;
 
-import com.mycompany.sorts.MacroBench;
-
 /**
  *
  * @author Pierre
@@ -18,10 +16,7 @@ class ObjectTriBench extends SetBench {
     @Override
     public void prepare() {
         super.prepare();
-        set = new ObjectTri();
-        for (String w : words) {
-            set.add(w);
-        }
+        set = ObjectTri.fromList(words);
     }
 
     @Override

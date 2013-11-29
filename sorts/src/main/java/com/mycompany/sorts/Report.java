@@ -37,7 +37,7 @@ public class Report {
         int col = 0;
         for (Column c : columns.values()) {
             if (col++ != 0) {
-                System.out.print(", ");
+                writeColumnSeparator();
             }
             inlineTitle(c.name);
             String strVal = c.value != null ? c.value : "";
@@ -63,15 +63,24 @@ public class Report {
         int col = 0;
         for (Column c : columns.values()) {
             if (col++ != 0) {
-                System.out.print(", ");
+                writeColumnSeparator();
             }
             System.out.print(c.name);
         }
         System.out.println();
     }
 
-    static void writeAllAsCsv(Iterable<Session> sessions) {
+    void writeColumnSeparator() {
+        System.out.print(", ");
+    }
+
+    public static void writeAllAsCsv(Iterable<Session> sessions) {
         final Report report = new Report() {
+
+            @Override
+            void writeColumnSeparator() {
+                System.out.print('\t');
+            }
 
             @Override
             void padding(int size) {

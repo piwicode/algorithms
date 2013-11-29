@@ -5,7 +5,6 @@
  */
 package com.mycompany.trie;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -67,10 +66,16 @@ public class ObjectTri {
         return true;
     }
 
-    CompactTri toCompactTrie() {
+    CompactTri toCompactTri() {
         final IntBuffer intBuffer = new IntBuffer();
         buildCompactTri(intBuffer);
         return new CompactTri(intBuffer.toArray());
+    }
+
+    CompactTriHybrid toCompactTriHybrid(int X) {
+        final IntBuffer intBuffer = new IntBuffer();
+        buildCompactTri(intBuffer);
+        return new CompactTriHybrid(intBuffer.toArray(),X);
     }
 
     public class IntBuffer {
@@ -79,41 +84,56 @@ public class ObjectTri {
         int size = 0;
 
         void zero(int repeat) {
-            ensureCapacity(size+repeat);
-            size+=repeat;
+            ensureCapacity(size + repeat);
+            size += repeat;
         }
+
         void add(int value) {
-            ensureCapacity(size+1);
+            ensureCapacity(size + 1);
             buf[size++] = value;
         }
-        void put(int offset,int value){
-            buf[offset]=value;
+
+        void put(int offset, int value) {
+            buf[offset] = value;
         }
 
         private void ensureCapacity(int c) {
-            int newSize=buf.length;
-            while(newSize<c)newSize*=2;
-            if(newSize!=buf.length)buf = Arrays.copyOf(buf, newSize);            
+            int newSize = buf.length;
+            while (newSize < c) {
+                newSize *= 2;
+            }
+            if (newSize != buf.length) {
+                buf = Arrays.copyOf(buf, newSize);
+            }
         }
-        int[] toArray(){
-            return  Arrays.copyOf(buf,size);
+
+        int[] toArray() {
+            return Arrays.copyOf(buf, size);
         }
-        int size(){
+
+        int size() {
             return size;
         }
     }
 
-    private void buildCompactTri(IntBuffer buf) {        
+    private void buildCompactTri(IntBuffer buf) {
         buf.add((nodes.length << 1) + (terminal ? 1 : 0));
         for (int i = 0; i < letters.length; i++) {
             buf.add(letters[i]);
         }
-        int ptrs=buf.size();
-        buf.zero(nodes.length);        
+        int ptrs = buf.size();
+        buf.zero(nodes.length);
         for (final ObjectTri node : nodes) {
-            buf.put(ptrs++,buf.size());
+            buf.put(ptrs++, buf.size());
             node.buildCompactTri(buf);
-        }        
+        }
     }
 
+    public static ObjectTri fromList(final Iterable<String> iterable) {
+        final ObjectTri objectTri = new ObjectTri();
+        for (CharSequence word : iterable) {
+            objectTri.add(word);
+        }
+        return objectTri;
+    }
 }

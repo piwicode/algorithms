@@ -5,7 +5,6 @@
  */
 package com.mycompany.trie;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -19,7 +18,7 @@ class HashSetBench extends SetBench {
     @Override
     public void prepare() {
         super.prepare();         
-        set = new HashSet<>(Arrays.asList(words));
+        set = new HashSet<>(words);
     }
 
     @Override
