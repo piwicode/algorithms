@@ -1,0 +1,4 @@
+${licenseFirst}
+${licensePrefix} Simple preformance benchmark and algorythms try-out:
+${licensePrefix} https://github.com/piwicode/algorithms
+${licenseLast}
