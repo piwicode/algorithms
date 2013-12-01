@@ -2,16 +2,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 /*
  * Solution proposal to coursea Algorithms Part 2
  * Programming Assignment 1: WordNet
- */
-/**
- *
- * @author Pierre
  */
 public class WordNet {
 
@@ -21,9 +16,9 @@ public class WordNet {
 
     /**
      * constructor takes the name of the two input files
-     * 
+     *
      * @throws NullPointerException if an input is null
-     */ 
+     */
     public WordNet(String synsetsFile, String hypernymsFile) {
         //Read synsets from the file to a memory structure. 1 synset = 1 node
         synsets = readSynset(synsetsFile);
@@ -34,10 +29,9 @@ public class WordNet {
         //Get the only root ignoring word vertices, or throw IAE
         final int root = getOnlyRoot(dg, synsets.size());//~V
         //Detect cycles
-        Digraph dgr = dg.reverse();//~E
+        final Digraph dgr = dg.reverse();//~E
         detectCycles(dgr, root);//~V+E
-        //Add the words to the graph
-        //~W
+        //Add the words to the graph ~W
         for (int ssIdx = 0; ssIdx < synsets.size(); ssIdx++) {
             WordNet.Synset ss = synsets.get(ssIdx);
             for (String word : ss.words) {
@@ -46,20 +40,24 @@ public class WordNet {
         }
         sap = new SAP(dg);
     }
+    
     // ~V
     private static List<Synset> readSynset(final String synsetsFile) throws IllegalArgumentException {
         final List<Synset> synsets = new ArrayList();
         final In in = new In(synsetsFile);
         while (in.hasNextLine()) {
-            final String[] elts = in.readLine().split(",");
-            if (elts.length != 3) throw new IllegalArgumentException();
+            final String[] elts = in.readLine().split(",", 3);
+            if (elts.length != 3)
+                throw new IllegalArgumentException("synset line " + Arrays.asList(elts) + " has not 3 elements");
             int id = Integer.parseInt(elts[0]);
-            if (synsets.size() != id) throw new IllegalArgumentException("synset id should be consecutive");
-            synsets.add(new Synset(id, elts[1], elts[2]));
+            if (synsets.size() != id)
+                throw new IllegalArgumentException("synset id should be consecutive");
+            synsets.add(new Synset(id, elts[1]));
         }
         in.close();
         return synsets;
     }
+
     // ~E
     private static Digraph readDg(String hypernymsFile, int size) throws NumberFormatException {
         Digraph res = new Digraph(size);
@@ -76,6 +74,7 @@ public class WordNet {
         return res;
     }
     // ~V
+
     private static int getOnlyRoot(Digraph dg, int max) throws IllegalArgumentException {
         int root = -1;
         for (int i = 0; i < max; i++) {
@@ -88,7 +87,10 @@ public class WordNet {
         if (root == -1) throw new IllegalArgumentException("no root");
         return root;
     }
+    final static int UNKNOWN = -1;
+    final static int DISCOVERED = -2;
     // ~V
+
     private void detectCycles(Digraph dg, int root) {
         int ages[] = new int[dg.V()];
         Arrays.fill(ages, -1);
@@ -96,17 +98,18 @@ public class WordNet {
     }
 
     private void detectCycles(Digraph dg, int[] ages, int node, int age) {
-        ages[node] = age;
+        ages[node] = DISCOVERED;
         for (Integer child : dg.adj(node)) {
-            if (ages[child] < 0) {
-                detectCycles(dg, ages, child, age + 1);
-            } else if (ages[child] <= age) {
+            if (ages[child] == UNKNOWN) {
+            } else if (ages[child] == DISCOVERED) {
                 //backedge
-                throw new IllegalArgumentException("backedge detected");
+                System.out.println("node:" + node);
+                throw new IllegalArgumentException("cycle detected win wordnet because of edge " + node + "(age:" + age + ")->" + child + "(age:" + ages[child] + ")");
             } else {
-                //skip forward edge ok
+                //Cross edge of foward edge
             }
         }
+        ages[node] = age;
     }
 
     private static HashMap<String, Integer> indexWords(List<Synset> synsets) {
@@ -125,14 +128,13 @@ public class WordNet {
     private static class Synset {
 
         private final int id;
-        private final String title, def;
+        private final String title;
         private final String words[];
 
-        private Synset(int id, String title, String def) {
+        private Synset(int id, String title) {
             this.id = id;
             this.title = title;
             this.words = title.split(" ");
-            this.def = def;
         }
 
     }
@@ -153,7 +155,7 @@ public class WordNet {
         final Integer b = words.get(nounB);
         if (a == null || b == null)
             throw new IllegalArgumentException("unknown word");
-        return sap.length(a, b);
+        return sap.length(a, b) - 2;
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
@@ -161,13 +163,13 @@ public class WordNet {
     public String sap(String nounA, String nounB) {
         final Integer a = words.get(nounA), b = words.get(nounB);
         if (a == null || b == null)
-            throw new IllegalArgumentException("unknown word");        
+            throw new IllegalArgumentException("unknown word");
         int ancestor = sap.ancestor(a, b);
         if (ancestor < 0) throw new IllegalArgumentException("no path");
         return synsets.get(ancestor).title;
     }
 
-// for unit testing of this class
+    // for unit testing of this class
     public static void main(String[] args) {
         In in = new In(args[0]);
         Digraph G = new Digraph(in);
