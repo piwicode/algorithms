@@ -8,7 +8,7 @@ package org.piwicode.bench.framework;
  *
  * @author Pierre
  */
-public class Statistics {
+class Statistics {
 
     double M = 0., S = 0., C = 0.;
 

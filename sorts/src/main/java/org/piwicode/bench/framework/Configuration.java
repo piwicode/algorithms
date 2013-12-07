@@ -4,24 +4,23 @@
  */
 package org.piwicode.bench.framework;
 
+import com.google.common.collect.ImmutableMap;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 /**
  *
  * @author Pierre
  */
-public class Configuration {
+class Configuration {
 
-    private final Map<String, Object> data = new LinkedHashMap<>();
+    private final ImmutableMap<String, Object> data;
 
-    Object put(String propertyName, Object value) {
-        return data.put(propertyName, value);
+    private Configuration(ImmutableMap<String, Object> in) {
+        data = ImmutableMap.copyOf(in);
     }
 
     <T> T configure(T object) {
@@ -29,7 +28,7 @@ public class Configuration {
             final BeanInfo beanInfo = Introspector.getBeanInfo(object.getClass());
             for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
                 final Object value = data.get(pd.getName());
-                if (value != null) {
+                if (value != null && pd.getWriteMethod() != null) {
                     pd.getWriteMethod().invoke(object, value);
                 }
             }
@@ -40,9 +39,38 @@ public class Configuration {
     }
 
     void writeTo(Report report) {
-        for(Entry<String,Object> e:data.entrySet()){
+        for (Entry<String, Object> e : data.entrySet()) {
             report.write(e.getKey(), e.getValue());
         }
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        for (Entry<String, Object> e : data.entrySet()) {
+            if (sb.length() != 0) {
+                sb.append(" - ");
+            }
+            sb.append(e.getKey()).append(":").append(e.getValue());
+        }
+        return sb.toString();
+    }
+
+    Object spawn() {
+        try {
+            final Class clazz = (Class) data.get("class");
+            final Object bench = clazz.newInstance();
+            return configure(bench);
+        } catch (InstantiationException | IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static Configuration create(Iterable<Entry<String, Object>> entries) {
+        ImmutableMap.Builder<String, Object> builder = new ImmutableMap.Builder<>();
+        for (Entry<String, Object> entry : entries) {
+            builder.put(entry);
+        }
+        return new Configuration(builder.build());
+    }
 }

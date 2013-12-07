@@ -8,6 +8,6 @@ package org.piwicode.bench.framework;
  *
  * @author Pierre
  */
-public interface Unit {
+interface Unit {
     double ratio();
 }

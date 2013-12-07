@@ -1,89 +1,98 @@
 /*
- * Simple preformance benchmark and algorythms try-out:
- * https://github.com/piwicode/algorithms
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.piwicode.bench.framework;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
  * @author Pierre
  */
-public class Session implements Comparable<Session> {
+public class Session {
 
-    private static final int MAX_RETRY = 4;
-    private final MacroBench bench;
-    private final Statistics stat = new Statistics();
-    private final Configuration config = new Configuration();
-    private final GCWatch gcWatch = GCWatch.instance();
+    ImmutableList.Builder<Set<Entry<String, Object>>> dimensions = ImmutableList.builder();
 
-    public Session(final MacroBench bench) {
-        this.bench = bench;
+    public interface Variation {
+
+        void beEqualTo(Object contant);
+
+        void beOneOf(Iterable<?> discreteValues);
+
+        void beOneOf(Object... discreteValues);
+
+        public void beInRange(int i, int i0);
     }
 
-    public Session with(String name, Object value) {
-        config.put(name, value);
-        return this;
-    }
+    public Variation let(final String parameterName) {
+        return new Variation() {
 
-    private long sampleElapsedTime() throws RuntimeException {
-        try {
-            long before = System.nanoTime();
-            bench.run();
-            long after = System.nanoTime();
-            return after - before;
-        } catch (Exception ex) {
-            throw new RuntimeException("The benched failed", ex);
-        }
-    }
-
-    public void run() {
-        config.configure(bench);
-        bench.prepare();
-
-        long beforeGc, afterGc, elapsedTime;
-        for (int retry = 0; retry < MAX_RETRY; retry++) {
-            beforeGc = gcWatch.getGCCount();
-            elapsedTime = sampleElapsedTime();
-            afterGc = gcWatch.getGCCount();
-            if (afterGc == beforeGc) {
-                stat.collate(elapsedTime/1000000.);
-                System.out.println(this);
-                return;
+            @Override
+            public void beEqualTo(Object value) {
+                dimensions.add(ImmutableSet.of(Maps.immutableEntry(parameterName, value)));
             }
-            System.out.println("Discard: " + retry + "/" + MAX_RETRY + " " + name());
+
+            @Override
+            public void beOneOf(Object... discreteValues) {
+                beOneOf(Arrays.asList(discreteValues));
+            }
+
+            @Override
+            public void beOneOf(Iterable<?> discreteValues) {
+                final ImmutableSet.Builder<Entry<String, Object>> builder = ImmutableSet.builder();
+                for (Object value : discreteValues) {
+                    builder.add(Maps.immutableEntry(parameterName, value));
+                }
+                dimensions.add(builder.build());
+            }
+
+            @Override
+            public void beInRange(int from, int to) {
+                beOneOf(Sample.linear(from, to, 1));
+            }
+        };
+    }
+
+    public static Session create() {
+        return new Session();
+    }
+
+    public Result run(int warmup, int runs) {
+        final List<Experiment> experiments = new ArrayList<>();
+        final Set<List<Entry<String, Object>>> cartesianProduct = Sets.cartesianProduct(dimensions.build());
+        for (List<Entry<String, Object>> configEntries : cartesianProduct) {
+            Configuration config = Configuration.create(configEntries);
+            experiments.add(Experiment.create(config));
         }
-        throw new RuntimeException("Garbage collector activity too high");
-    }
 
-    public String name() {
-        String[] parts = bench.toString().split("\\.");
-        return parts[parts.length - 1].split("@")[0];
-    }
-
-    @Override
-    public String toString() {
-        return name() + " - " + stat;
-    }
-    public void writeTo(Report report){
-        report.write("name", name());
-        config.writeTo(report);
-        stat.writeTo(report);
-    }
-
-    public static void runAll(Iterable<Session> sessions, int sampleSize) {
-        for (Session session : sessions) {
-            session.stat.reset();
-        }
-        for (int i = 0; i < sampleSize; i++) {
-            for (Session session : sessions) {
-                session.run();
+        Collections.shuffle(experiments);
+        for (int i = 0; i < warmup; i++) {
+            for (Experiment m : experiments) {
+                m.run();
             }
         }
-    }
 
-    @Override
-    public int compareTo(Session o) {
-        return Double.compare(stat.mean(), o.stat.mean());
-    }
+        for (Experiment m : experiments) {
+            m.reset();
+        }
 
+        for (int i = 0; i < runs; i++) {
+            for (Experiment m : experiments) {
+                m.run();
+            }
+        }
+        
+        return new Result(experiments);
+    }
 }

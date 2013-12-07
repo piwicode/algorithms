@@ -8,7 +8,7 @@ package org.piwicode.bench.framework;
  *
  * @author Pierre
  */
-public class Units {
+class Units {
 
     static String format(double v, Class<? extends Enum<? extends Unit>> unit) {
         final Unit[] scale= (Unit[]) unit.getEnumConstants();

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Pierre
  */
-public class PrettyPrint {
+class PrettyPrint {
 
     public static void printAll(Iterable<?> objs, String separator) {
         ArrayList<Integer> colSize = new ArrayList<Integer>();

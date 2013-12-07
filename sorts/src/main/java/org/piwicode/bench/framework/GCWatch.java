@@ -14,20 +14,22 @@ import javax.management.ObjectName;
  *
  * @author Pierre
  */
-public abstract class GCWatch {
+abstract class GCWatch {
     public static  GCWatch instance(){
         return instance;
     }
-    private static GCWatch instance=create();    
+    private static final GCWatch instance=create();    
     private static GCWatch create() {
         try {
             final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
             final ObjectName scavenge = new ObjectName("java.lang:type=GarbageCollector,name=PS Scavenge");
+            final ObjectName markSweep = new ObjectName("java.lang:type=GarbageCollector,name=PS MarkSweep");            
             return new GCWatch() {
                 @Override
                 long getGCCount() {
                     try {
-                        return (Long) mbs.getAttribute(scavenge, "CollectionCount");
+                        return (Long) mbs.getAttribute(scavenge, "CollectionCount")
+                                + (Long) mbs.getAttribute(markSweep, "CollectionCount");
                     } catch (JMException ex) {
                         return -1;
                     }
