@@ -5,6 +5,8 @@
  */
 package org.piwicode.bench.framework;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -17,6 +19,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.AbstractRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -95,8 +100,11 @@ public class Result {
                 true, // tooltips
                 false // urls
                 );
-
-        final ChartPanel chartPanel = new ChartPanel(chart);
+        XYItemRenderer renderer = ((XYPlot)chart.getPlot()).getRenderer();
+        renderer.setBaseStroke( new BasicStroke( 2 ) );
+        ((AbstractRenderer)renderer).setAutoPopulateSeriesStroke(false);
+        chart.getLegend().setBackgroundPaint(Color.lightGray);
+        final ChartPanel chartPanel = new ChartPanel(chart);        
         chartPanel.setMouseZoomable(true);
         chartPanel.setMouseWheelEnabled(true);
         chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
@@ -110,7 +118,7 @@ public class Result {
 
     }
 
-    static Comparable nameFor(Object serie) {
+    private static Comparable nameFor(Object serie) {
         if (serie instanceof Class) {
             String pattern = String.format("%s|%s|%s",
                     "(?<=[A-Z])(?=[A-Z][a-z])",

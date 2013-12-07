@@ -75,13 +75,18 @@ public class Session {
             Configuration config = Configuration.create(configEntries);
             experiments.add(Experiment.create(config));
         }
-
+        long last = 0;
         Collections.shuffle(experiments);
         for (int i = 0; i < warmup; i++) {
             for (Experiment m : experiments) {
                 m.run();
+                if (System.currentTimeMillis() - last > 1000) {
+                    System.out.printf("Wariming up [%d/%d]\n", i , warmup);
+                    last = System.currentTimeMillis();
+                }
             }
         }
+        System.out.printf("Wariming up [%d/%d]\n", warmup, warmup);
 
         for (Experiment m : experiments) {
             m.reset();
@@ -90,9 +95,14 @@ public class Session {
         for (int i = 0; i < runs; i++) {
             for (Experiment m : experiments) {
                 m.run();
+                if (System.currentTimeMillis() - last > 1000) {
+                    System.out.printf("Bench [%d/%d]\n", i , runs);
+                    last = System.currentTimeMillis();
+                }
             }
         }
-        
+        System.out.printf("Bench [%d/%d]\n", runs, runs);
+
         return new Result(experiments);
     }
 }

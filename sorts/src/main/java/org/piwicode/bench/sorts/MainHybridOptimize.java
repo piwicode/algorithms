@@ -4,7 +4,6 @@
  */
 package org.piwicode.bench.sorts;
 
-import org.piwicode.bench.framework.Result;
 import org.piwicode.bench.framework.Sample;
 import org.piwicode.bench.framework.Session;
 
@@ -17,8 +16,9 @@ public class MainHybridOptimize {
     public static void main(String[] args) {
         final Session session = Session.create();
         session.let("class").beEqualTo(HybridQuicksort.class);
+        session.let("n").beEqualTo(100000);
         session.let("split").beOneOf(Sample.linear(2, 300, 1));
-        final Result run = session.run(2, 2);
-        run.showBests();
+        session.run(2, 4).plot("Hybrid quicksort optimization", "class", "split", "mean");
+        
     }
 }

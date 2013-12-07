@@ -4,7 +4,6 @@
  */
 package org.piwicode.bench.sorts;
 
-import org.piwicode.bench.framework.Result;
 import org.piwicode.bench.framework.Sample;
 import org.piwicode.bench.framework.Session;
 
@@ -25,9 +24,8 @@ public class MainComplexity {
                 HybridQuicksort.class,
                 RadixCountingSort.class,
                 RadixBinarySort.class);
-        session.let("n").beOneOf(Sample.linear(10, 1000, 10));
+        session.let("n").beOneOf(Sample.linear(1, 1500, 10));
 
-        final Result run = session.run(5, 200);
-        run.showCSV();
+        session.run(10, 300).plot("", "class", "n","mean");        
     }
 }

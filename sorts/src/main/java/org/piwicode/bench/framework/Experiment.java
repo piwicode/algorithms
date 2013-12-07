@@ -49,8 +49,7 @@ class Experiment implements Comparable<Experiment> {
             elapsedTime = sampleElapsedTime(bench);
             afterGc = gcWatch.getGCCount();
             if (afterGc == beforeGc) {
-                stat.collate(elapsedTime / 1000000.);
-                System.out.println(this);
+                stat.collate(elapsedTime / 1000000.);                
                 return;
             }
             System.out.println("Discard: " + retry + "/" + MAX_RETRY + " " + name());
