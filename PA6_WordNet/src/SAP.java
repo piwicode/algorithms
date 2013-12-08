@@ -29,8 +29,8 @@ public class SAP {
     // length of shortest ancestral path between v and w; -1 if no such path
     // ~V+E
     public int length(int v, int w) {
-        if (v >= halfSize || v < 0) throw new IllegalArgumentException();
-        if (w >= halfSize || w < 0) throw new IllegalArgumentException();
+        checkInputBound(v);
+        checkInputBound(w);
 
         // Check the cache
         if (w == bfsId) {
@@ -57,8 +57,8 @@ public class SAP {
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     // ~V+E
     public int ancestor(int v, int w) {
-        if (v >= halfSize || v < 0) throw new IllegalArgumentException();
-        if (w >= halfSize || w < 0) throw new IllegalArgumentException();
+        checkInputBound(v);
+        checkInputBound(w);
         //Check the cache
         if (w == bfsId) {
             w = v;
@@ -68,44 +68,32 @@ public class SAP {
             bfsId = v;
             bfs = new BreadthFirstDirectedPaths(dg, v);
         }
-        Iterable<Integer> path = bfs.pathTo(w + halfSize);
-        if (path == null) return -1;
-        for (int node : path) {
-            if (node >= halfSize)
-                return node - halfSize;
-        }
-        throw new RuntimeException("should never happend");
+        return ancestorOfPath(bfs.pathTo(w + halfSize));
     }
 
-    // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
-    public int length(Iterable<Integer> vs, Iterable<Integer> ws) {
-        if (vs == null) throw new NullPointerException();
-        if (ws == null) throw new NullPointerException();
-        final BreadthFirstDirectedPaths mbfs = new BreadthFirstDirectedPaths(dg, vs);
-        int distTo = Integer.MAX_VALUE;
-        for (int w : ws) {
-            distTo = Math.min(distTo, mbfs.distTo(w));
-        }
-        return distTo == Integer.MAX_VALUE ? -1 : distTo;
+    /**
+     * length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
+     * @throws IllegalAccessException is vs or ws elements are out of [0,dg.V()]
+     * @throws NullPointerException 
+     */ 
+    public int length(final Iterable<Integer> vs, final Iterable<Integer> ws) {
+        checkBound(vs);
+        checkBound(ws);
+        final BreadthFirstDirectedPaths mbfs = new BreadthFirstDirectedPaths(dg, vs);        
+        final int to = closestFrom(ws, mbfs);
+        if (to == -1) return -1;
+        final int distTo = mbfs.distTo(to+halfSize);
+        return distTo == Integer.MAX_VALUE ? -1 : distTo - 1;
     }
 
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> vs, Iterable<Integer> ws) {
+        checkBound(vs);
+        checkBound(ws);
         final BreadthFirstDirectedPaths mbfs = new BreadthFirstDirectedPaths(dg, vs);
-        int to = -1, min = Integer.MAX_VALUE;
-        for (int w : ws) {
-            if (mbfs.distTo(w) < min) {
-                to = w;
-                min = mbfs.distTo(w);
-            }
-        }
-
+        int to = closestFrom(ws, mbfs);
         if (to == -1) return -1;
-        for (int node : mbfs.pathTo(to)) {
-            if (node > halfSize)
-                return node - halfSize;
-        }
-        throw new RuntimeException("should never happend");
+        return ancestorOfPath(mbfs.pathTo(to + halfSize));
     }
 
     // for unit testing of this class (such as the one below)
@@ -120,5 +108,36 @@ public class SAP {
             int ancestor = sap.ancestor(v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
         }
+    }
+
+    private void checkInputBound(int v) throws IndexOutOfBoundsException  {
+        if (v >= halfSize || v < 0) throw new IndexOutOfBoundsException ();
+    }
+
+    private void checkBound(Iterable<Integer> vs) throws IndexOutOfBoundsException  {
+        for (int v : vs) {
+            checkInputBound(v);
+        }
+    }
+
+    private int ancestorOfPath(Iterable<Integer> path) throws RuntimeException {
+        if (path == null) return -1;
+        for (int node : path) {
+            if (node >= halfSize)
+                return node - halfSize;
+        }
+        throw new RuntimeException("should never happend");
+    }
+
+    private int closestFrom(Iterable<Integer> ws, final BreadthFirstDirectedPaths mbfs) {
+        int to = -1, min = Integer.MAX_VALUE;
+        for (int w : ws) {
+            final int d = mbfs.distTo(w + halfSize);
+            if (d < min) {
+                to = w;
+                min = d;
+            }
+        }
+        return to;
     }
 }

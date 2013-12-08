@@ -2,6 +2,7 @@
  * Solution proposal to coursea Algorithms Part 2
  * Programming Assignment 1: WordNet
  */
+import java.util.Collections;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,12 +25,12 @@ public class SAPTest {
         new SAP(new Digraph(0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void empty_graph_ancestor() {
         new SAP(new Digraph(0)).ancestor(0, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void empty_graph_length() {
         new SAP(new Digraph(0)).length(0, 0);
     }
@@ -39,42 +40,42 @@ public class SAPTest {
         assertEquals(0, new SAP(new Digraph(1)).length(0, 0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_length_too_big_1() {
         assertEquals(0, new SAP(new Digraph(1)).length(1, 0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_length_too_big_2() {
         assertEquals(0, new SAP(new Digraph(1)).length(0, 1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_length_too_small_1() {
         assertEquals(0, new SAP(new Digraph(1)).length(-1, 0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_length_too_small_2() {
         assertEquals(0, new SAP(new Digraph(1)).length(0, -1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_ancestor_too_big_1() {
         assertEquals(0, new SAP(new Digraph(1)).ancestor(1, 0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_ancestor_too_big_2() {
         assertEquals(0, new SAP(new Digraph(1)).ancestor(0, 1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_ancestor_too_small_1() {
         assertEquals(0, new SAP(new Digraph(1)).ancestor(-1, 0));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void test_ancestor_too_small_2() {
         assertEquals(0, new SAP(new Digraph(1)).ancestor(0, -1));
     }
@@ -105,6 +106,11 @@ public class SAPTest {
         assertEquals(expectedLength, sap.length(v2, v1));
         assertEquals(expectedAncestor, sap.ancestor(v1, v2));
         assertEquals(expectedAncestor, sap.ancestor(v2, v1));
+        assertEquals(expectedLength, sap.length(Collections.singletonList(v1), Collections.singletonList(v2)));
+        assertEquals(expectedLength, sap.length(Collections.singletonList(v2), Collections.singletonList(v1)));
+        assertEquals(expectedAncestor, sap.ancestor(Collections.singletonList(v1), Collections.singletonList(v2)));
+        assertEquals(expectedAncestor, sap.ancestor(Collections.singletonList(v2), Collections.singletonList(v1)));
     }
 
+    
 }

@@ -17,6 +17,8 @@ public class WordNet {
     /**
      * constructor takes the name of the two input files
      *
+     * @param synsetsFile path to the synsets file
+     * @param hypernymsFile path to the hymernyms file
      * @throws NullPointerException if an input is null
      */
     public WordNet(String synsetsFile, String hypernymsFile) {
@@ -40,7 +42,7 @@ public class WordNet {
         }
         sap = new SAP(dg);
     }
-    
+
     // ~V
     private static List<Synset> readSynset(final String synsetsFile) throws IllegalArgumentException {
         final List<Synset> synsets = new ArrayList();
@@ -87,10 +89,10 @@ public class WordNet {
         if (root == -1) throw new IllegalArgumentException("no root");
         return root;
     }
-    final static int UNKNOWN = -1;
-    final static int DISCOVERED = -2;
-    // ~V
+    private final static int UNKNOWN = -1;
+    private final static int DISCOVERED = -2;
 
+// ~V
     private void detectCycles(Digraph dg, int root) {
         int ages[] = new int[dg.V()];
         Arrays.fill(ages, -1);
@@ -155,7 +157,7 @@ public class WordNet {
         final Integer b = words.get(nounB);
         if (a == null || b == null)
             throw new IllegalArgumentException("unknown word");
-        return sap.length(a, b) - 2;
+        return Math.max(0, sap.length(a, b) - 2);
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
@@ -166,6 +168,7 @@ public class WordNet {
             throw new IllegalArgumentException("unknown word");
         int ancestor = sap.ancestor(a, b);
         if (ancestor < 0) throw new IllegalArgumentException("no path");
+        if (ancestor >= synsets.size()) return null;
         return synsets.get(ancestor).title;
     }
 
