@@ -1,7 +1,5 @@
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /*
  * Solution proposal to coursea Algorithms Part 2
@@ -9,21 +7,73 @@ import java.util.List;
  */
 public class SAP {
 
+    private static final int UNKNOWN = Integer.MAX_VALUE;
     private final Digraph dg;
     private int lastd, lasta;
-    int queue[], qh, qt;
-    private final int d[];
-    private final byte c[];
+    private Iterable<Integer> lastvs, lastws;
+    private final DFS d1, d2;
 
+    private class DFS {
+
+        private final int queue[];
+        private int qh, qt;
+        private final int d[];
+
+        private DFS(int size) {
+            queue = new int[size];
+            d = new int[size];
+            Arrays.fill(d, UNKNOWN);
+        }
+
+        private void clear() {
+            for (int i = 0; i < qt; i++) {
+                d[queue[i]] = UNKNOWN;
+            }
+            qt = qh = 0;
+            assert cleanState();
+        }
+
+        private boolean cleanState() {
+            for (int v : d) {
+                if (v != Integer.MAX_VALUE) return false;
+            }
+            return true;
+        }
+
+        private void add(int v, int vdist, DFS other) {
+            queue[qt++] = v;
+            d[v] = vdist;
+            if (other.d[v] != UNKNOWN) {
+                final int length = vdist + other.d[v];
+                if (lastd > length) {
+                    lastd = length;
+                    lasta = v;
+                }
+            }
+        }
+
+        private boolean over() {
+            return qh == qt;
+        }
+
+        private void dfsUpTo(int dmax, DFS other) {
+            while (!over() && d[queue[qh]] < dmax) {
+                int v = queue[qh++];
+                for (int n : dg.adj(v)) {
+                    if (d[n] == UNKNOWN) {
+                        add(n, d[v] + 1, other);
+                    }
+                }
+            }
+        }
+    }
     // constructor takes a digraph (not necessarily a DAG)
     // ~V+3*E
+
     public SAP(Digraph in) {
-        this.dg = new Digraph(in);
-        d = new int[in.V()];
-        queue = new int[in.V() * 2];
-        c = new byte[in.V()];
-        Arrays.fill(d, Integer.MAX_VALUE);
-        Arrays.fill(c, (byte) 0);
+        d1 = new DFS(in.V());
+        d2 = new DFS(in.V());
+        dg = new Digraph(in);
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
@@ -80,55 +130,26 @@ public class SAP {
     private void doubleDfs(Iterable<Integer> vs, Iterable<Integer> ws) {
         checkBound(vs);
         checkBound(ws);
-
-        for (int i = 0; i < qt; i++) {
-            d[queue[i]] = Integer.MAX_VALUE;
-            c[queue[i]] = 0;
-        }
-        assert cleanState();
-        qh = 0;
-        qt = 0;
+        if ((vs.equals(lastvs) && ws.equals(lastws))
+                || (vs.equals(lastws) && ws.equals(lastvs)))
+            return;
+        lastvs = vs;
+        lastws = ws;
+        d1.clear();
+        d2.clear();
+        lasta = -1;
+        lastd = UNKNOWN;
         for (int v : vs) {
-            queue[qt++] = v;
-            d[v] = 0;
-            c[v] = 1;
+            d1.add(v, 0, d2);
         }
         for (int w : ws) {
-            queue[qt++] = w;
-            d[w] = 0;
-            if (c[w] == 1) {
-                lasta = w;
-                lastd = 0;
-                return;
-            }
-            c[w] = 2;
+            d2.add(w, 0, d1);
         }
-        while (qh < qt) {
-            int n = queue[qh++];
-            for (int to : dg.adj(n)) {
-                if (c[to] == 0) {
-                    queue[qt++] = to;
-                    c[to] = c[n];
-                    d[to] = d[n] + 1;
-                } else if (c[to] != c[n]) {
-                    lasta = to;
-                    lastd = d[to] + d[n] + 1;
-                    return;
-                }
-            }
+        for (int dmax = 1; dmax <= lastd; dmax++) {
+            d1.dfsUpTo(dmax, d2);
+            d2.dfsUpTo(dmax, d1);
+            if (d1.over() && d2.over()) break;
         }
-        lasta = -1;
-        lastd = -1;
+        if (lastd == Integer.MAX_VALUE) lastd = -1;
     }
-
-    private boolean cleanState() {
-        for (int v : d) {
-            if (v != Integer.MAX_VALUE) return false;
-        }
-        for (byte v : c) {
-            if (v != (byte) 0) return false;
-        }
-        return true;
-    }
-
 }

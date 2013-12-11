@@ -111,6 +111,25 @@ public class SAPTest {
         assertEquals(expectedAncestor, sap.ancestor(Collections.singletonList(v1), Collections.singletonList(v2)));
         assertEquals(expectedAncestor, sap.ancestor(Collections.singletonList(v2), Collections.singletonList(v1)));
     }
-
-    
+    @Test
+    public void test_digraph3(){
+        Digraph dg = new Digraph(new In(getClass().getResource("digraph3.txt")));
+        SAP sap = new SAP(dg);
+        assertEquals(3, sap.length(10, 7));
+        assertEquals(5, sap.length(14,7));
+        assertEquals(5, sap.length(8,13));
+    }
+    @Test
+    public void test_digraph4(){
+        Digraph dg = new Digraph(new In(getClass().getResource("digraph4.txt")));
+        SAP sap = new SAP(dg);
+        assertEquals(3, sap.length(1, 4));
+    }
+     @Test
+    public void test_digraph5(){
+        Digraph dg = new Digraph(new In(getClass().getResource("digraph5.txt")));
+        SAP sap = new SAP(dg);
+        assertEquals(5, sap.length(17, 21));
+        assertEquals(4, sap.length(17, 20));
+    }
 }
