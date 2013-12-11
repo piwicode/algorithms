@@ -1,16 +1,16 @@
 
 /*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 3: Collinear Points
  *//*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 3: Collinear Points
  */
 /*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 3: Collinear Points
  *//*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 3: Collinear Points
  */
 

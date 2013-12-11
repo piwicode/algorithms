@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 /*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 4: 8 Puzzle
  */
 /**

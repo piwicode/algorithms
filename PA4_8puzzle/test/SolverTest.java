@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 4: 8 Puzzle
  */
 /**

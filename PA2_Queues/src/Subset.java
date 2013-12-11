@@ -1,7 +1,7 @@
 import java.util.NoSuchElementException;
 
 /*
- * Solution proposal to coursea Algorithms Part 1
+ * Solution proposal to coursera Algorithms Part 1
  * Programming Assignment 2: Randomized Queues and Deques
  */
 /**

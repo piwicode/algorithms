@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /*
- * Solution proposal to coursea Algorithms Part 2
+ * Solution proposal to coursera Algorithms Part 2
  * Programming Assignment 1: WordNet
  */
 public class SAP {

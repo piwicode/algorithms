@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /*
- * Solution proposal to coursea Algorithms Part 2
+ * Solution proposal to coursera Algorithms Part 2
  * Programming Assignment 1: WordNet
  */
 public class WordNet {

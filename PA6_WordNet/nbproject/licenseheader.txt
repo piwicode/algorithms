@@ -1,7 +1,7 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
-${licensePrefix}Solution proposal to coursea Algorithms Part 2
+${licensePrefix}Solution proposal to coursera Algorithms Part 2
 ${licensePrefix}Programming Assignment 1: WordNet
 <#if licenseLast??>
 ${licenseLast}
