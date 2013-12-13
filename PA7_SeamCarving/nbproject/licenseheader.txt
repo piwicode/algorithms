@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Solution proposal to coursera Algorithms Part 2
+${licensePrefix}Programming Assignment 2: Seam Carving
+<#if licenseLast??>
+${licenseLast}
+</#if>
