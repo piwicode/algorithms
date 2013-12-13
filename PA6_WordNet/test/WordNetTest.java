@@ -46,14 +46,16 @@ public class WordNetTest {
     @Test
     public void test_distance2() {
         assertEquals(33, wordNet.distance("Black_Plague", "black_marlin"));
+        assertEquals(0, wordNet.distance("Black_Plague", "Black_Plague"));
+        assertEquals("Black_Death Black_Plague", wordNet.sap("Black_Plague", "Black_Plague"));
         assertEquals(27, wordNet.distance("American_water_spaniel", "histology"));
         assertEquals(29, wordNet.distance("Brown_Swiss", "barrel_roll"));
     }
 
     @Test
     public void test_outcast() {
-        Outcast outcast = new Outcast(wordNet);
-        assertEquals("alveolar_rhabdosarcoma", outcast.outcast(new String[]{"cat","car","house","bus"}));
+        Outcast outcast = new Outcast(wordNet);        
+        assertEquals("Turing", outcast.outcast(new String[]{"Turing", "von_Neumann"}));
     }
 
 }

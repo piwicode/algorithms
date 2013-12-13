@@ -13,7 +13,7 @@ public class WordNet {
     private final HashMap<String, Integer> words;
     private final List<Synset> synsets;
     private final SAP sap;
-
+    private final Digraph dg;
     /**
      * constructor takes the name of the two input files
      *
@@ -27,7 +27,7 @@ public class WordNet {
         //Assign an indice to each distinct word. 1 vertex=1 node
         words = indexWords(synsets);
         //Create a graph with synset & word nodes, add edges from the file
-        final Digraph dg = readDg(hypernymsFile, synsets.size() + words.size());//~V+E
+        dg = readDg(hypernymsFile, synsets.size() + words.size());//~V+E
         //Get the only root ignoring word vertices, or throw IAE
         final int root = getOnlyRoot(dg, synsets.size());//~V
         //Detect cycles
@@ -168,7 +168,9 @@ public class WordNet {
             throw new IllegalArgumentException("unknown word");
         int ancestor = sap.ancestor(a, b);
         if (ancestor < 0) throw new IllegalArgumentException("no path");
-        if (ancestor >= synsets.size()) return null;
+        if (ancestor >= synsets.size()){
+            ancestor=dg.adj(ancestor).iterator().next();
+        }
         return synsets.get(ancestor).title;
     }
 

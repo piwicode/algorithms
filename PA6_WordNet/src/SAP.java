@@ -41,7 +41,8 @@ public class SAP {
         }
 
         private void add(int v, int vdist, DFS other) {
-            queue[qt++] = v;
+            if (d[v] == UNKNOWN)
+                queue[qt++] = v;
             d[v] = vdist;
             if (other.d[v] != UNKNOWN) {
                 final int length = vdist + other.d[v];
@@ -128,17 +129,20 @@ public class SAP {
     }
 
     private void doubleDfs(Iterable<Integer> vs, Iterable<Integer> ws) {
-        checkBound(vs);
-        checkBound(ws);
-        if ((vs.equals(lastvs) && ws.equals(lastws))
-                || (vs.equals(lastws) && ws.equals(lastvs)))
-            return;
-        lastvs = vs;
-        lastws = ws;
-        d1.clear();
-        d2.clear();
-        lasta = -1;
-        lastd = UNKNOWN;
+        if (vs.equals(lastvs) == false) {
+            checkBound(vs);
+            d1.clear();
+            lasta = -1;
+            lastd = UNKNOWN;
+            lastvs = vs;
+        }
+        if (ws.equals(lastws) == false) {
+            checkBound(ws);
+            d2.clear();
+            lasta = -1;
+            lastd = UNKNOWN;
+            lastws = ws;
+        }
         for (int v : vs) {
             d1.add(v, 0, d2);
         }
