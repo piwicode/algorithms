@@ -54,8 +54,13 @@ public class WordNetTest {
 
     @Test
     public void test_outcast() {
-        Outcast outcast = new Outcast(wordNet);        
+        Outcast outcast = new Outcast(wordNet);
         assertEquals("Turing", outcast.outcast(new String[]{"Turing", "von_Neumann"}));
+        assertEquals("table", outcast.outcast("horse zebra cat bear table".split(" ")));
+        assertEquals("cat", outcast.outcast("table chair bed cat".split(" ")));
+        assertEquals("jail", outcast.outcast("car horse bike plane foot boat jail".split(" ")));
+        
+        
     }
 
 }

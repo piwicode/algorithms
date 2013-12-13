@@ -24,11 +24,11 @@ public class Outcast {
                 d[j]+=dist;
             }
         }
-        int min=0;
+        int max=0;
         for(int i = 1 ; i < d.length ; i ++){
-            min = Math.min(min,d[i]);
+            if(d[i]>d[max])max=i;            
         }
-        return nouns[min];
+        return nouns[max];
     }
 
     // for unit testing of this class (such as the one below)
