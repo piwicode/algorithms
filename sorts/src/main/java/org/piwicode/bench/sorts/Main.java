@@ -27,8 +27,6 @@ public class Main {
                 RadixBinarySort.class);
 
         Result result = session.run(1, 1);
-
-        result.showBests();
-
+        result.plotBarChart("Average elapsed time to sort one million integers", "class", "mean");
     }
 }

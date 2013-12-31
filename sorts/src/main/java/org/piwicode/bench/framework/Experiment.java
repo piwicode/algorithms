@@ -14,7 +14,7 @@ import com.google.common.base.Stopwatch;
 class Experiment implements Comparable<Experiment> {
 
     private static final int MAX_RETRY = 4;
-    private final Statistics stat = new Statistics();
+    private final Statistics stat = new Statistics(TimeUnit.ns);
     private final Configuration config;
     private final GCWatch gcWatch = GCWatch.instance();
     private final MacroBench bench;
@@ -49,7 +49,7 @@ class Experiment implements Comparable<Experiment> {
             elapsedTime = sampleElapsedTime(bench);
             afterGc = gcWatch.getGCCount();
             if (afterGc == beforeGc) {
-                stat.collate(elapsedTime / 1000000.);                
+                stat.collate(elapsedTime);                
                 return;
             }
             System.out.println("Discard: " + retry + "/" + MAX_RETRY + " " + name());

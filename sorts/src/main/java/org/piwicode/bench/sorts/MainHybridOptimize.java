@@ -18,7 +18,6 @@ public class MainHybridOptimize {
         session.let("class").beEqualTo(HybridQuicksort.class);
         session.let("n").beEqualTo(100000);
         session.let("split").beOneOf(Sample.linear(2, 300, 1));
-        session.run(2, 4).plot("Hybrid quicksort optimization", "class", "split", "mean");
-        
+        session.run(2, 4).plot("Hybrid quicksort optimization", "class", "split", "mean");        
     }
 }

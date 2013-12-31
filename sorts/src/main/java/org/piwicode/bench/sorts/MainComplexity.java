@@ -24,8 +24,8 @@ public class MainComplexity {
                 HybridQuicksort.class,
                 RadixCountingSort.class,
                 RadixBinarySort.class);
-        session.let("n").beOneOf(Sample.linear(1, 1500, 10));
+        session.let("n").beOneOf(Sample.linear(10, 1500, 10));
 
-        session.run(10, 300).plot("", "class", "n","mean");        
+        session.run(10, 100).plot("", "class", "n","mean");        
     }
 }

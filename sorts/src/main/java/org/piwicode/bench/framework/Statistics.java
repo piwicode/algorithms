@@ -10,6 +10,11 @@ package org.piwicode.bench.framework;
  */
 class Statistics {
 
+    public Statistics(TimeUnit tu) {
+        this.tu = tu;
+    }
+    
+    final TimeUnit tu;
     double M = 0., S = 0., C = 0.;
 
     void reset(){
@@ -53,7 +58,7 @@ class Statistics {
     }
 
     String format(double v) {
-        return TimeUnit.format(v * 1E-3);
+        return TimeUnit.s.format(v * 1E-3);
     }
 
     @Override
