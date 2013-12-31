@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Solution proposal to coursera Algorithms Part 2
+${licensePrefix}Programming Assignment 5: Burrow-Wheeler
+<#if licenseLast??>
+${licenseLast}
+</#if>
