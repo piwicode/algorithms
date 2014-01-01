@@ -7,7 +7,6 @@ import java.util.Arrays;
 public class CircularSuffixArray {
 
     final private Suffix[] array;
-
     private static class Suffix implements Comparable<Suffix> {
 
         private final String txt;
@@ -20,7 +19,7 @@ public class CircularSuffixArray {
 
         private int charAt(int i) {
             i += pos;
-            return txt.charAt(i > txt.length() ? i - txt.length() : i);
+            return txt.charAt(i < txt.length() ? i : i - txt.length());
         }
 
         @Override
