@@ -46,10 +46,10 @@ public class BWCoderDecoder {
             next[n] = i;
         }
 
-        int cur = next[first], end = next[first];
-        do {
+        int cur = next[first], len = in.length();
+        for (int i = 0; i < len; i++) {
             out.write(in.charAt(cur));
             cur = next[cur];
-        } while (cur != end);
+        };
     }
 }

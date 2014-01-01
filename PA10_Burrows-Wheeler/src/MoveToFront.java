@@ -8,21 +8,20 @@ public class MoveToFront {
 
     public static void encode() {
         final MTFCoderDecoder mtf = new MTFCoderDecoder();
-        final BinaryOut out = new BinaryOut();
+        
         while (!BinaryStdIn.isEmpty()) {
-            out.write(mtf.encode(BinaryStdIn.readByte()));
+            BinaryStdOut.write(mtf.encode(BinaryStdIn.readByte()));
         }
-        out.close();
+        BinaryStdOut.flush();
     }
     // apply move-to-front decoding, reading from standard input and writing to standard output
 
     public static void decode() {
-        final MTFCoderDecoder mtf = new MTFCoderDecoder();
-        final BinaryOut out = new BinaryOut();
+        final MTFCoderDecoder mtf = new MTFCoderDecoder();        
         while (!BinaryStdIn.isEmpty()) {
-            out.write(mtf.decode(BinaryStdIn.readByte()));
+            BinaryStdOut.write(mtf.decode(BinaryStdIn.readByte()));
         }
-        out.close();
+        BinaryStdOut.flush();
     }
     // if args[0] is '-', apply move-to-front encoding
     // if args[0] is '+', apply move-to-front decoding

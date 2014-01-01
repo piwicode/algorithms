@@ -38,6 +38,20 @@ public class BWCoderDecoderTest {
     @Test
     public void testSomeMethod() {
         String rs = randomString(1024);
+        roundTrip(rs);
+    }
+
+    @Test
+    public void star() {
+        roundTrip("*************");
+    }
+
+    @Test
+    public void couscous() {
+        roundTrip("couscous");
+    }
+
+    private void roundTrip(String rs) {
         CharSinkBuf coded = new CharSinkBuf();
         BWCoderDecoder.code(rs, coded);
         int first = (coded.buf.charAt(0) << 24) + (coded.buf.charAt(1) << 16) + (coded.buf.charAt(2) << 8) + coded.buf.charAt(3);
