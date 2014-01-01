@@ -29,17 +29,7 @@ public class BWCoderDecoder {
     }
 
     public static void decode(int first, CharSequence in, CharSink out) {
-        final int[] count = new int[256];
-        for (int i = 0; i < in.length(); i++) {
-            count[in.charAt(i)]++;
-        }
-        int sum = 0;
-        for (int i = 0; i < count.length; i++) {
-            int p = count[i];
-            count[i] = sum;
-            sum += p;
-        }
-
+        int[] count = firstIdxInSortedArray(in);
         final int[] next = new int[in.length()];
         for (int i = 0; i < in.length(); i++) {
             int n = count[in.charAt(i)]++;
@@ -51,5 +41,19 @@ public class BWCoderDecoder {
             out.write(in.charAt(cur));
             cur = next[cur];
         };
+    }
+
+    static int[] firstIdxInSortedArray(CharSequence in) {
+        final int[] count = new int[256];
+        for (int i = 0; i < in.length(); i++) {
+            count[in.charAt(i)]++;
+        }
+        int sum = 0;
+        for (int i = 0; i < count.length; i++) {
+            int p = count[i];
+            count[i] = sum;
+            sum += p;
+        }
+        return count;
     }
 }
