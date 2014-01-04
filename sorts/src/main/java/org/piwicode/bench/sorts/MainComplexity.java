@@ -26,6 +26,6 @@ public class MainComplexity {
                 RadixBinarySort.class);
         session.let("n").beOneOf(Sample.linear(10, 1500, 10));
 
-        session.run(10, 100).plot("", "class", "n","mean");        
+        session.run(10, 100).plot("", "class", "n","mean").show();        
     }
 }

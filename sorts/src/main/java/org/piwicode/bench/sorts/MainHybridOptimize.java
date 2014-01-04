@@ -17,7 +17,9 @@ public class MainHybridOptimize {
         final Session session = Session.create();
         session.let("class").beEqualTo(HybridQuicksort.class);
         session.let("n").beEqualTo(100000);
-        session.let("split").beOneOf(Sample.linear(2, 300, 1));
-        session.run(2, 4).plot("Hybrid quicksort optimization", "class", "split", "mean");        
+        session.let("split").beOneOf(Sample.linear(2, 250, 1));
+        session.run(20,20 ).plot("Hybrid quicksort optimization", "class",
+                "split: length of insertion sort runs", "mean: average elapsed time")
+                .includeZero(false).show();
     }
 }

@@ -29,7 +29,6 @@ public class RadixBinarySort extends SortBench {
                 } else {
                     array[p++] = v;
                 }
-
             }
             System.arraycopy(buffer, 0, array, p, q);
         }

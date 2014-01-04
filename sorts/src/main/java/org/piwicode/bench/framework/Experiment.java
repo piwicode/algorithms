@@ -5,7 +5,6 @@
 package org.piwicode.bench.framework;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 
 /**
  *

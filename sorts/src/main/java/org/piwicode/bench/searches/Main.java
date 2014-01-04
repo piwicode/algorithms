@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Simple preformance benchmark and algorythms try-out:
+ * https://github.com/piwicode/algorithms
  */
 package org.piwicode.bench.searches;
 
@@ -21,7 +20,7 @@ public class Main {
         session.let("r").beEqualTo(500);
         
         Result run = session.run(200, 1000);
-        run.plot("Average elapsed time (µs)", "class", "n", "mean");
+        run.plot("Average elapsed time (µs)", "class", "n", "mean").show();
         
     }
 }

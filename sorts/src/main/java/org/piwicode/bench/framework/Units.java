@@ -4,6 +4,8 @@
  */
 package org.piwicode.bench.framework;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author Pierre
@@ -20,6 +22,6 @@ class Units {
                 break;
             }
         }
-        return String.format("%.2f " + d, v / d.ratio());
+        return new DecimalFormat("#.##").format(v / d.ratio())+" "+d;
     }
 }
