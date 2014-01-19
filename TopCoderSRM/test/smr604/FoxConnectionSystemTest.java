@@ -12,7 +12,7 @@ import org.junit.runners.Parameterized;
  * @author Pierre
  */
 @RunWith(Parameterized.class)
-public class FoxConnectionTestParam {
+public class FoxConnectionSystemTest {
 
     private final int[] A, B;
     private final String fox;
@@ -20,10 +20,10 @@ public class FoxConnectionTestParam {
 
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() throws IOException {
-        return SystemTest.parseCaseForTest(FoxConnectionTestParam.class);
+        return SystemTest.parseCaseForTest(FoxConnectionSystemTest.class);
     }
 
-    public FoxConnectionTestParam(int[] A, int[] B, String fox, int expected) {
+    public FoxConnectionSystemTest(int[] A, int[] B, String fox, int expected) {
         this.A = A;
         this.B = B;
         this.fox = fox;
