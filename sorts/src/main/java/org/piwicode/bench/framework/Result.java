@@ -7,6 +7,7 @@ package org.piwicode.bench.framework;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -23,16 +24,22 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.AbstractRenderer;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.TextAnchor;
 import org.jfree.util.SortOrder;
 
 /**
@@ -84,9 +91,9 @@ public class Result {
 
             @Override
             public void write(String name, Object value) {
-                if (name.equals(serieKey))
+                if (name.equals(serieKey)) {
                     serie = value;
-                else if (name.equals(xAxis.key)) {
+                } else if (name.equals(xAxis.key)) {
                     x = (Number) value;
                 } else if (name.equals(yAxis.key)) {
                     y = (Number) value;
@@ -95,8 +102,9 @@ public class Result {
 
             @Override
             public void nextRaw() {
-                if (x == null || y == null || serie == null)
+                if (x == null || y == null || serie == null) {
                     throw new IllegalStateException();
+                }
                 XYSeries trace = traces.get(serie);
                 if (trace == null) {
                     trace = new XYSeries(nameFor(serie));
@@ -122,15 +130,21 @@ public class Result {
                 true, // include legend
                 true, // tooltips
                 false // urls
-                );
+        );
+
+        chart.setTitle(new TextTitle(title, TITLE_FONT));
         final XYPlot plot = (XYPlot) chart.getPlot();
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setNumberFormatOverride(new UnitNumberFormat(TimeUnit.ns));
-        XYItemRenderer renderer = plot.getRenderer();
+        rangeAxis.setLabelFont(AXIS_FONT);
+        plot.getDomainAxis().setLabelFont(AXIS_FONT);
+        final XYItemRenderer renderer = plot.getRenderer();
         renderer.setBaseStroke(new BasicStroke(2));
         ((AbstractRenderer) renderer).setAutoPopulateSeriesStroke(false);
         chart.getLegend().setBackgroundPaint(Color.lightGray);
-        if (traces.size() == 1) chart.getLegend().setVisible(false);
+        if (traces.size() == 1) {
+            chart.getLegend().setVisible(false);
+        }
         final ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setMouseZoomable(true);
         chartPanel.setMouseWheelEnabled(true);
@@ -155,6 +169,8 @@ public class Result {
             }
         };
     }
+    private final Font AXIS_FONT = new Font("Arial", java.awt.Font.PLAIN, 15);
+    private Font TITLE_FONT = new Font("Arial", java.awt.Font.BOLD, 18);
 
     private static Comparable nameFor(Object serie) {
         if (serie instanceof Class) {
@@ -162,12 +178,15 @@ public class Result {
                     "(?<=[A-Z])(?=[A-Z][a-z])",
                     "(?<=[^A-Z])(?=[A-Z])",
                     "(?<=[A-Za-z])(?=[^A-Za-z])"
-                    );
+            );
             return ((Class) serie).getSimpleName().replaceAll(pattern, " ");
-        } else return serie.toString();
+        } else {
+            return serie.toString();
+        }
     }
 
     public Plot plotBarChart(String title, final String serieKey, final String valueDef) {
+        final Axis hAxis = new Axis(serieKey);
         final Axis vAxis = new Axis(valueDef);
         // Create an ITrace:         
         final DefaultKeyedValues data = new DefaultKeyedValues();
@@ -178,17 +197,18 @@ public class Result {
 
             @Override
             public void write(String name, Object value) {
-                if (name.equals(serieKey))
+                if (name.equals(hAxis.key)) {
                     serie = value;
-                else if (name.equals(vAxis.key)) {
+                } else if (name.equals(vAxis.key)) {
                     v = (Number) value;
                 }
             }
 
             @Override
             public void nextRaw() {
-                if (serie == null || v == null)
+                if (serie == null || v == null) {
                     throw new IllegalStateException();
+                }
                 data.addValue(nameFor(serie), v.doubleValue());
             }
         };
@@ -202,22 +222,31 @@ public class Result {
         // create the chart...
         final JFreeChart chart = ChartFactory.createBarChart(
                 title, // chart title
-                serieKey, // domain axis label
+                hAxis.label, // domain axis label
                 vAxis.label, // range axis label
                 dataset, // data
                 PlotOrientation.VERTICAL,
                 true, // include legend
                 true,
                 false
-                );
-        CategoryPlot plot = (CategoryPlot) chart.getPlot();
+        );
+        final CategoryPlot plot = (CategoryPlot) chart.getPlot();        
+        CategoryItemRenderer renderer = plot.getRenderer();
+        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}",new UnitNumberFormat(TimeUnit.ns)));
+        renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.INSIDE12, TextAnchor.TOP_CENTER));
+        renderer.setBaseItemLabelsVisible(true);  
+        chart.setTitle(new TextTitle(title, TITLE_FONT));        
         CategoryAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setLabelFont(AXIS_FONT);
+        domainAxis.setMaximumCategoryLabelLines(3);
+        
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setNumberFormatOverride(new UnitNumberFormat(TimeUnit.ns));
-        domainAxis.setMaximumCategoryLabelLines(3);
+        rangeAxis.setLabelFont(AXIS_FONT);
+        
         chart.removeLegend();
         final ChartPanel chartPanel = new ChartPanel(chart);
-
+        
         chartPanel.setPreferredSize(new java.awt.Dimension(600, 400));
         final JFrame frame = new JFrame("Benchmark results");
         frame.setContentPane(chartPanel);
