@@ -2,9 +2,9 @@
  *  Simple preformance benchmark and algorythms try-out:
  *  https://github.com/piwicode/algorithms
  */
+
 package org.piwicode.bench.dictionary;
 
-import java.util.HashSet;
 import java.util.Random;
 import org.piwicode.bench.framework.MacroBench;
 
@@ -12,30 +12,26 @@ import org.piwicode.bench.framework.MacroBench;
  *
  * @author Pierre
  */
-public class HashBench implements MacroBench {
-
+public class SetBench implements MacroBench{
     Integer[] array;
     int N = 1000 * 1000;
-    
+
     public void setN(int N) {
         this.N = N;
     }
-    
+
     @Override
     public void prepare() {
         array = new Integer[N];
         Random r = new Random();
-        for(int i = 0 ; i < array.length; i++){
-            array[i]=r.nextInt();
-        }        
+        for (int i = 0; i < array.length; i++) {
+            array[i] = r.nextInt(100000) - 50000;
+        }
     }
 
     @Override
     public void run() {
-        HashSet<Integer> set = new HashSet<>((int)(N/.75));
-        for(int i = 0 ; i < array.length ; i++){
-            set.add(array[i]);
-        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
 }

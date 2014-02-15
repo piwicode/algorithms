@@ -10,11 +10,11 @@ import java.util.TreeSet;
  *
  * @author Pierre
  */
-public class TreeBench extends SetBench {
+public class IntegerSetBench extends SetBench {
 
     @Override
     public void run() {
-        TreeSet<Integer> set = new TreeSet<>();
+        IntegerSet set = new IntegerSet();
         for (int i = 0; i < array.length; i++) {
             set.add(array[i]);
         }

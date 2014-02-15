@@ -18,8 +18,9 @@ public class Main {
         Session session = Session.create();
 
         session.let("class").beOneOf(
-                HashBench.class,
+                HashSetBench.class,
                 TreeBench.class,
+                IntegerSetBench.class,
                 BitsetBench.class);
 
         Result result = session.run(10, 10);

@@ -4,17 +4,19 @@
  */
 package org.piwicode.bench.dictionary;
 
-import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.Random;
+import org.piwicode.bench.framework.MacroBench;
 
 /**
  *
  * @author Pierre
  */
-public class TreeBench extends SetBench {
+public class HashSetBench extends SetBench {
 
     @Override
     public void run() {
-        TreeSet<Integer> set = new TreeSet<>();
+        final HashSet<Integer> set = new HashSet<>((int) (N / .75));
         for (int i = 0; i < array.length; i++) {
             set.add(array[i]);
         }
