@@ -23,7 +23,7 @@ public class Main {
                 DualpivotQuicksort.class,
                 Heapsort.class,
                 HybridQuicksort.class,
-                RadixCountingSort.class,
+                NaiveRadixCountingSort.class,
                 RadixBinarySort.class);
 
         Result result = session.run(1, 1);

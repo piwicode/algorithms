@@ -23,7 +23,7 @@ public class MainDupplicate {
                 DualpivotQuicksort.class,
                 Heapsort.class,
                 HybridQuicksort.class,
-                RadixCountingSort.class,
+                NaiveRadixCountingSort.class,
                 RadixBinarySort.class);
         session.let("n").beOneOf(Sample.linear(0., 1., .1));
 

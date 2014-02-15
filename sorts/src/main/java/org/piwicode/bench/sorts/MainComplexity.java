@@ -16,6 +16,7 @@ public class MainComplexity {
     public static void main(String[] args) {
         final Session session = Session.create();
         session.let("class").beOneOf(
+                InsertionSort.class,
                 Quicksort.class,
                 QuicksortWithTailRecursion.class,
                 Mergesort.class,
@@ -23,9 +24,10 @@ public class MainComplexity {
                 Heapsort.class,
                 HybridQuicksort.class,
                 RadixCountingSort.class,
+                NaiveRadixCountingSort.class,
                 RadixBinarySort.class);
-        session.let("n").beOneOf(Sample.linear(10, 1500, 10));
+        session.let("n").beOneOf(Sample.linear(10, 1000, 10));
 
-        session.run(10, 100).plot("", "class", "n","mean").show();        
+        session.run(1000, 4000).plot("", "class", "n","mean").show();        
     }
 }

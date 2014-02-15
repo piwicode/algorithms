@@ -12,6 +12,7 @@ public class QuicksortWithTailRecursion extends SortBench {
     }
 
     static void sort(int[] array, int lo, int hi) {
+        //if (hi <= lo) {
         while (lo < hi) {
             int p = array[hi], firstBig = lo, t;
             for (int i = lo; i < hi; i++) {
@@ -24,6 +25,7 @@ public class QuicksortWithTailRecursion extends SortBench {
             array[hi] = array[firstBig];
             array[firstBig] = p;
             sort(array, lo, firstBig - 1);
+            //sort(array, firstBig + 1, hi);
             lo = firstBig + 1;
         }
     }

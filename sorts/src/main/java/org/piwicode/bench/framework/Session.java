@@ -80,7 +80,7 @@ public class Session {
             for (Experiment m : experiments) {
                 m.run();
                 if (System.currentTimeMillis() - last > 1000) {
-                    System.out.printf("Wariming up [%d/%d]\n", i , warmup);
+                    System.out.printf("Warming up [%d/%d]\n", i , warmup);
                     last = System.currentTimeMillis();
                 }
             }

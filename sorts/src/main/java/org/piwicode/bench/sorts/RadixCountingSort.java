@@ -9,6 +9,7 @@ import java.util.Arrays;
 public class RadixCountingSort extends SortBench {
 
     int bucket[] = new int[257];
+    int bucket2[] = new int[257];
     int buffer[];
 
     @Override
@@ -19,30 +20,37 @@ public class RadixCountingSort extends SortBench {
 
     @Override
     public void run() {
-        sort(array, buffer, bucket);
+        sort(array, buffer, bucket, bucket2);
     }
 
-    static void sort(int[] array, int[] buffer, int[] bucket) {
-        for (int shift = 0; shift < 64;) {
-            bucketSort(array, buffer, bucket, shift);
-            shift += 8;
-            bucketSort(buffer, array, bucket, shift);
-            shift += 8;
-        }
-    }
-
-    private static void bucketSort(int[] array, int[] buffer, int[] bucket, int shift) {
+    static void sort(int[] array, int[] buffer, int[] bucket, int[] bucket2) {
         Arrays.fill(bucket, 0);
         for (int i = 0; i < array.length; i++) {
-            final int idx = (array[i] >>> shift) & 0xff;
-            bucket[idx + 1]++;
+            bucket[(array[i] & 0xff) + 1]++;
         }
-        for (int i = 1; i < bucket.length; i++) {
-            bucket[i] += bucket[i - 1];
+        for (int shift = 0; shift < 24;) {
+            int nextShift = shift + 8;
+            for (int i = 1; i < bucket.length; i++) {
+                bucket[i] += bucket[i - 1];
+            }
+            Arrays.fill(bucket2, 0);
+            for (int i = 0; i < array.length; i++) {
+                final int v = array[i];
+                bucket2[((v >>> nextShift) & 0xff) + 1]++;
+                buffer[bucket[(v >>> shift) & 0xff]++] = array[i];
+            }
+            int[] ta = array;
+            array = buffer;
+            buffer = ta;
+            int[] tb = bucket;
+            bucket = bucket2;
+            bucket2 = tb;
+            shift = nextShift;
         }
         for (int i = 0; i < array.length; i++) {
-            final int idx = (array[i] >>> shift) & 0xff;
+            final int idx = (array[i] >>> 24) & 0xff;
             buffer[bucket[idx]++] = array[i];
         }
     }
+
 }
