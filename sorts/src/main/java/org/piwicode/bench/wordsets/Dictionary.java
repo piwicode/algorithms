@@ -25,10 +25,14 @@ public class Dictionary {
         try {
             final URL url = Resources.getResource(Dictionary.class, "dictionary.txt");
             lines = CharStreams.readLines(Resources.asCharSource(url, Charsets.UTF_8));
-            Collections.shuffle(lines);
+            Collections.shuffle(lines, new Random(0));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String[] copy() {
+        return lines.toArray(new String[0]);
     }
 
     public static String[] sample(int size) {

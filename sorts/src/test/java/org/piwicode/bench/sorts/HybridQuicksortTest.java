@@ -4,8 +4,6 @@
  */
 package org.piwicode.bench.sorts;
 
-import org.piwicode.bench.sorts.HybridQuicksort;
-import static org.piwicode.bench.sorts.IntegerSortBench.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.piwicode.bench.framework.IntegerArray;
