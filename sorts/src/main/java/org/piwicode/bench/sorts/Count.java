@@ -4,7 +4,7 @@
  */
 package org.piwicode.bench.sorts;
 
-public class Count extends SortBench {
+public class Count extends IntegerSortBench {
 
     int N = 1024 * 1024 * 1024;
     public int r;

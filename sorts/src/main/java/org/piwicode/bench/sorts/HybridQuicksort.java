@@ -8,7 +8,7 @@ package org.piwicode.bench.sorts;
  * Hello world!
  *
  */
-public class HybridQuicksort extends SortBench {
+public class HybridQuicksort extends IntegerSortBench {
 
     int cutoff = 75;
 

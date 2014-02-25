@@ -4,7 +4,7 @@
  */
 package org.piwicode.bench.sorts;
 
-public class Mergesort extends SortBench {
+public class Mergesort extends IntegerSortBench {
 
     private int[] buffer;
 

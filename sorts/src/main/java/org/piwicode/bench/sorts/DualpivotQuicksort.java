@@ -10,7 +10,7 @@ import java.util.Arrays;
  * Hello world!
  *
  */
-public class DualpivotQuicksort extends SortBench {
+public class DualpivotQuicksort extends IntegerSortBench {
 
     @Override
     public void run() {

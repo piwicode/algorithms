@@ -4,7 +4,7 @@
  */
 package org.piwicode.bench.sorts;
 
-public class QuicksortWithTailRecursion extends SortBench {
+public class QuicksortWithTailRecursion extends IntegerSortBench {
 
     @Override
     public void run() {

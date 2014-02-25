@@ -2,7 +2,7 @@
  * Simple preformance benchmark and algorythms try-out:
  * https://github.com/piwicode/algorithms
  */
-package org.piwicode.bench.dictionary;
+package org.piwicode.bench.stringsort;
 
 import org.piwicode.bench.framework.Result;
 import org.piwicode.bench.framework.Session;
@@ -17,12 +17,11 @@ public class Main {
         Session session = Session.create();
 
         session.let("class").beOneOf(
-                HashSetBench.class,
-                TreeBench.class,
-                IntegerSetBench.class,
-                BitsetBench.class);
+                MSBRadixThreeWayQuickSort.class,
+                JdkSort.class
+        );
 
-        Result result = session.run(10, 10);
-        result.plotBarChart("Average elapsed time to fill with one million integers", "class: Data structure", "mean").show();        
+        Result result = session.run(5, 5);
+        result.plotBarChart("Average elapsed time to sort one million string", "class", "mean").show();
     }
 }

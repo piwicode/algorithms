@@ -8,7 +8,7 @@ import org.piwicode.bench.framework.MacroBench;
 import org.piwicode.bench.framework.IntegerArray;
 
 
-public abstract class SortBench implements MacroBench {
+public abstract class IntegerSortBench implements MacroBench {
 
     int[] array;
     int N = 1000 * 1000;

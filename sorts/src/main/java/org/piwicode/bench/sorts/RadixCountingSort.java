@@ -6,7 +6,7 @@ package org.piwicode.bench.sorts;
 
 import java.util.Arrays;
 
-public class RadixCountingSort extends SortBench {
+public class RadixCountingSort extends IntegerSortBench {
 
     int bucket[] = new int[257];
     int bucket2[] = new int[257];

@@ -5,10 +5,8 @@
 package org.piwicode.bench.dictionary;
 
 import java.util.BitSet;
-import java.util.HashSet;
 import java.util.Random;
 import org.piwicode.bench.framework.MacroBench;
-import sun.security.util.BitArray;
 
 /**
  *

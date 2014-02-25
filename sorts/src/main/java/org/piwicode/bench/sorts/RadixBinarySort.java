@@ -4,7 +4,7 @@
  */
 package org.piwicode.bench.sorts;
 
-public class RadixBinarySort extends SortBench {
+public class RadixBinarySort extends IntegerSortBench {
 
     int buffer[];
 

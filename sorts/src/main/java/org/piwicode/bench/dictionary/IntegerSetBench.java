@@ -4,8 +4,6 @@
  */
 package org.piwicode.bench.dictionary;
 
-import java.util.TreeSet;
-
 /**
  *
  * @author Pierre

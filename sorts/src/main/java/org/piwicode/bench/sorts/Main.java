@@ -23,10 +23,10 @@ public class Main {
                 DualpivotQuicksort.class,
                 Heapsort.class,
                 HybridQuicksort.class,
-                NaiveRadixCountingSort.class,
+                RadixCountingSort.class,
                 RadixBinarySort.class);
 
-        Result result = session.run(1, 1);
+        Result result = session.run(10, 10);
         result.plotBarChart("Average elapsed time to sort one million integers", "class", "mean").show();
     }
 }

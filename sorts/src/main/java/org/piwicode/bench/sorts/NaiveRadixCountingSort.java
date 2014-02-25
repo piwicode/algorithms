@@ -6,7 +6,7 @@ package org.piwicode.bench.sorts;
 
 import java.util.Arrays;
 
-public class NaiveRadixCountingSort extends SortBench {
+public class NaiveRadixCountingSort extends IntegerSortBench {
 
     int bucket[] = new int[257];
     int buffer[];
@@ -44,5 +44,5 @@ public class NaiveRadixCountingSort extends SortBench {
             final int idx = (array[i] >>> shift) & 0xff;
             buffer[bucket[idx]++] = array[i];
         }
-    }
+    }    
 }

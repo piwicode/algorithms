@@ -8,7 +8,7 @@ package org.piwicode.bench.sorts;
  * Hello world!
  *
  */
-public class Heapsort extends SortBench {
+public class Heapsort extends IntegerSortBench {
 
     @Override
     public void run() {
